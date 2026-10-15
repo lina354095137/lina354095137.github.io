@@ -1,0 +1,14 @@
+{
+  "name": "米乐的账本",
+  "short_name": "米乐账本",
+  "description": "睡觉换时长 · 手机时间约定周结算",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4EFE8",
+  "theme_color": "#E8734A",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
