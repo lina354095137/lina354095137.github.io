@@ -126,7 +126,7 @@
   <details class="rules">
     <summary>约定条款</summary>
     <ol>
-      <li>周一至周四 <em>11:00 前</em>熄灯：≤10:30 睡 → 周末每天 <em>+30</em>；10:30–11:00 睡 → 正常；11:00 后睡 → <em>晚 1 分钟扣 1 分钟</em>。</li>
+      <li>周一至周四 <em>11:00</em> 熄灯为基准：早睡 <em>1 分钟换 1 分钟</em>（10:38 睡 = 周末每天 <em>+22</em>，10:00 睡 = +60）；11:00 后睡 <em>晚 1 分钟扣 1 分钟</em>（11:30 = −30）。</li>
       <li>周五<em>自由夜</em>：补课结束玩到 24:00，超时部分从<em>下周五</em>自由时长扣。</li>
       <li>周一至周四每天手机 <em>40 分钟</em>，到时上锁，固定不抵扣。</li>
       <li>周末每天 = <em>120 + 本周结算</em>；周六日睡觉不考核。</li>
@@ -151,13 +151,11 @@ const DAYS = [
   { key:'sun', name:'周日', sub:'不考核', special:true, noscore:true },
 ];
 
-function calc(v) { // 熄灯时间 "HH:MM" → 结算分钟
+function calc(v) { // 熄灯时间 "HH:MM" → 结算分钟（以 23:00 为锚全程线性）
   if (!v) return null;
   const [h, m] = v.split(':').map(Number);
   const t = h * 60 + m;
-  if (t <= 22 * 60 + 30) return 30;       // ≤10:30
-  if (t <= 23 * 60) return 0;             // 10:30–11:00
-  return -(t - 23 * 60);                  // 11:00 后 1:1
+  return 23 * 60 - t;                     // 11:00 前 = +早睡分钟，11:00 后 = −晚睡分钟
 }
 
 function init() {
@@ -166,7 +164,7 @@ function init() {
     <div class="day ${d.special ? 'special' : ''}">
       <div class="dw">${d.name}<small>${d.sub}</small></div>
       <input type="time" id="in_${d.key}" onchange="save()">
-      <div class="hint">${d.key === 'fri' ? '可玩到 24:00' : (d.noscore ? '—' : '关灯即记')}</div>
+      <div class="hint">${d.key === 'fri' ? '可玩到 24:00' : (d.noscore ? '—' : '24小时制：22:38=晚10:38')}</div>
       <div class="badge" id="bd_${d.key}">未填</div>
     </div>`).join('');
   const saved = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
