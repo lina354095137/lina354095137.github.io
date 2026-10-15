@@ -113,7 +113,12 @@
     </div>
     <div class="ex-card" style="flex:1.4;">
       <h3>🏦 学期存钱罐</h3>
-      <div class="row">罐内累计 <span class="ex-res" id="potVal">0</span> 分钟</div>
+      <div class="row">罐内累计 <span class="ex-res" id="potVal">0</span> 分钟 <button class="btn-min" id="potMgrBtn" onclick="togglePotMgr()">✎ 调整</button></div>
+      <div class="row" id="potMgrBox" style="display:none;">
+        <input type="number" id="potAdj" placeholder="正存 负取" style="width:88px;padding:5px 6px;border:1.5px solid #E3D8CE;border-radius:8px;font-size:13px;">
+        <button class="btn-min" onclick="applyPotAdj()">确定</button>
+        <button class="btn-min" onclick="clearPot()">清零</button>
+      </div>
       <div class="row">本周溢出 <span id="potWeek">0</span> 分钟 <button class="btn-min" id="potBtn" onclick="savePot()">存入</button></div>
       <div class="row">寒假 <input type="number" id="holiDays" placeholder="40" min="1" max="60" style="width:52px;padding:5px 6px;border:1.5px solid #E3D8CE;border-radius:8px;font-size:13px;" oninput="save()"> 天 → 每天可加 <span class="ex-res" id="holiAdd">—</span></div>
       <div class="row" style="font-size:10.5px;color:#9AA6B4;">每周超 180 的部分存入罐中，学期末 1 分钟换 1 分钟兑成假期时间</div>
@@ -170,6 +175,7 @@ function calc(v) { // 熄灯时间 "HH:MM" → 结算分钟（以 23:00 为锚�
 }
 
 function init() {
+  migratePot();
   const box = document.getElementById('days');
   box.innerHTML = DAYS.map(d => `
     <div class="day ${d.special ? 'special' : ''}">
@@ -190,6 +196,42 @@ function init() {
 
 const CAP = 180; // 周末每天封顶，超出自动入学期存钱罐
 
+// ===== 存钱罐独立存储（与周数据完全解耦）=====
+function getPot() { return JSON.parse(localStorage.getItem('mile_phone_pot') || '{}').pot || 0; }
+function setPot(v) { localStorage.setItem('mile_phone_pot', JSON.stringify({ pot: Math.max(0, Math.round(v)) })); }
+
+function migratePot() { // 旧版：pot 存在周数据里 → 迁移到独立 key（一次性）
+  const week = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
+  if (week.pot !== undefined) {
+    if (getPot() === 0 && week.pot > 0) setPot(week.pot);
+    delete week.pot;
+    localStorage.setItem('mile_phone_week', JSON.stringify(week));
+  }
+}
+
+function togglePotMgr() {
+  const box = document.getElementById('potMgrBox');
+  box.style.display = box.style.display === 'none' ? 'flex' : 'none';
+}
+
+function applyPotAdj() { // 手动调整：正存 负取
+  const v = parseInt(document.getElementById('potAdj').value || 0);
+  if (!v) { toast('请输入调整值（正存负取）'); return; }
+  setPot(getPot() + v);
+  document.getElementById('potAdj').value = '';
+  document.getElementById('potMgrBox').style.display = 'none';
+  toast(`已调整，罐内 ${getPot()} 分钟`);
+  render();
+}
+
+function clearPot() { // 学期末兑换后归零
+  if (!confirm('确定清零存钱罐？清零后无法恢复（一般学期末兑换完才用）')) return;
+  setPot(0);
+  document.getElementById('potMgrBox').style.display = 'none';
+  toast('存钱罐已清零');
+  render();
+}
+
 function save() {
   const data = { weekLabel: document.getElementById('weekLabel').value };
   DAYS.forEach(d => data[d.key] = document.getElementById('in_' + d.key).value);
@@ -198,8 +240,7 @@ function save() {
   data.streak = document.getElementById('streak').value;
   data.holiDays = document.getElementById('holiDays').value;
   const prev = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
-  data.pot = prev.pot || 0;          // 存钱罐跨周保留
-  data.potSaved = prev.potSaved || false;
+  data.potSaved = prev.potSaved || false; // 本周是否已存（周数据里，换周自动重置）
   localStorage.setItem('mile_phone_week', JSON.stringify(data));
   render();
 }
@@ -209,8 +250,8 @@ function savePot() { // 本周溢出存入存钱罐（每周一次）
   if (prev.potSaved) { toast('本周已存过啦'); return; }
   const over = calcOver();
   if (over <= 0) { toast('本周没有溢出积分'); return; }
+  setPot(getPot() + over);
   const data = JSON.parse(localStorage.getItem('mile_phone_week'));
-  data.pot = (data.pot || 0) + over;
   data.potSaved = true;
   localStorage.setItem('mile_phone_week', JSON.stringify(data));
   toast(`已存入 ${over} 分钟`);
@@ -260,7 +301,7 @@ function render() {
     over > 0 ? `${String(Math.floor(cut/60)).padStart(2,'0')}:${String(cut%60).padStart(2,'0')}` : '24:00';
   // 存钱罐
   const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
-  const pot = store.pot || 0, potSaved = !!store.potSaved;
+  const pot = getPot(), potSaved = !!store.potSaved;
   const thisOver = Math.max(0, raw - CAP);
   document.getElementById('potVal').textContent = pot;
   document.getElementById('potWeek').textContent = thisOver;
@@ -273,10 +314,8 @@ function render() {
 }
 
 function resetWeek() {
-  if (!confirm('清空本周所有记录？\n（存钱罐积分会保留）')) return;
-  const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
-  const pot = store.pot || 0;
-  localStorage.setItem('mile_phone_week', JSON.stringify({ pot: pot })); // 只保留罐
+  if (!confirm('清空本周所有记录？\n（存钱罐积分独立存放，不受影响）')) return;
+  localStorage.removeItem('mile_phone_week');
   init();
   toast('已清空，存钱罐保留');
 }
@@ -290,7 +329,7 @@ function copyResult() {
   const raw = Math.max(0, 120 + sum + exam + streakBonus);
   const fin = Math.min(raw, 180);
   const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
-  const pot = store.pot || 0;
+  const pot = getPot();
   const thisOver = Math.max(0, raw - 180);
   const over = parseInt(document.getElementById('friOver').value || 0);
   const cut = 24 * 60 - over;
