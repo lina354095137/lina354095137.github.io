@@ -296,6 +296,49 @@
   .m-btns.col { flex-direction:column; }
   .m-btns.col .m-btn { width:100%; justify-content:center; }
 
+  /* ===== 手动约定 + 编辑约定 ===== */
+  .v-edit {
+    margin-left:auto; display:inline-flex; align-items:center; gap:4px;
+    background:rgba(255,255,255,.12); color:var(--dark-ink);
+    font-size:11px; font-weight:700; padding:6px 10px; border-radius:999px;
+    transition:transform .15s ease, background-color .2s; flex:none; align-self:center;
+  }
+  .v-edit:active { transform:scale(.94); background:rgba(255,255,255,.22); }
+  .v-edit .icon { width:12px; height:12px; }
+  .fin-flag {
+    display:inline-block; background:var(--accent); color:#fff;
+    font-size:9px; font-weight:800; letter-spacing:.5px;
+    padding:2px 8px; border-radius:999px; vertical-align:1px; margin-left:4px;
+  }
+  .m-form { margin-top:10px; }
+  .m-form input {
+    width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:10px;
+    font-size:16px; font-weight:800; background:#FDFBF7; outline:none; text-align:center;
+  }
+  .m-hint { margin-top:6px; font-size:10.5px; color:var(--ink-3); text-align:center; }
+  .m-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; margin-top:10px; }
+  .m-grid label { font-size:10.5px; color:var(--ink-2); font-weight:700; display:flex; flex-direction:column; gap:4px; }
+  .m-grid input {
+    padding:7px 9px; border:1.5px solid var(--line); border-radius:9px;
+    font-size:14px; font-weight:800; background:#FDFBF7; outline:none; width:100%;
+    font-variant-numeric:tabular-nums;
+  }
+  .m-grid input:focus, .m-form input:focus, #rgTerms:focus { border-color:var(--accent); }
+  #rgTerms {
+    width:100%; margin-top:6px; padding:9px 11px; border:1.5px solid var(--line);
+    border-radius:10px; font-size:12px; line-height:1.7; background:#FDFBF7;
+    outline:none; font-family:inherit; color:var(--ink); resize:vertical;
+  }
+  .rules-date { font-size:9.5px; color:var(--ink-3); font-weight:500; margin-left:6px; }
+  .rules-edit-btn {
+    display:flex; align-items:center; justify-content:center; gap:5px; width:100%;
+    margin-top:11px; padding:9px; border-radius:10px;
+    border:1.5px dashed #D9C4A8; color:var(--ink-2); font-size:11.5px; font-weight:700;
+    transition:color .2s, border-color .2s, transform .15s ease; background:none;
+  }
+  .rules-edit-btn:active { transform:scale(.98); color:var(--accent-deep); border-color:var(--accent); }
+  .rules-edit-btn .icon { width:13px; height:13px; }
+
   /* ===== 条款 ===== */
   .rules {
     margin-top:14px; background:var(--surface-warm);
@@ -417,10 +460,14 @@
   <div class="day-group" id="days"></div>
 
   <div class="verdict" id="verdictCard">
-    <div class="v-label">下周末每天可用</div>
+    <div class="v-label">下周末每天可用 <span class="fin-flag" id="finFlag" style="display:none;">已约定</span></div>
     <div class="v-main">
       <span class="v-num num" id="sumFinal">120</span>
       <span class="v-unit">分钟 / 天</span>
+      <button class="v-edit" id="finEditBtn" onclick="askCustomFin()" aria-label="手动约定周末额度">
+        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M13 5.5l5.5 5.5"/><path d="M4 20l1-4L16.5 4.5a2.12 2.12 0 0 1 3 3L8 19l-4 1z"/></svg>
+        约定
+      </button>
     </div>
     <div class="v-rows">
       <div class="v-row"><span>睡觉加减合计</span><b id="sumSleep">0 分钟</b></div>
@@ -471,20 +518,15 @@
 
   <details class="rules">
     <summary>
-      约定条款
+      我们的约定
+      <span class="rules-date" id="rulesDate"></span>
       <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
     </summary>
-    <ol>
-      <li>周一至周四 <em>11:00</em> 熄灯为基准：早睡 <em>1 分钟换 1 分钟</em>（10:38 睡 = 周末每天 <em>+22</em>，10:00 睡 = +60）；11:00 后睡 <em>晚 1 分钟扣 1 分钟</em>（11:30 = −30）。</li>
-      <li>周五<em>自由夜</em>：补课结束玩到 24:00，超时部分从<em>下周五</em>自由时长扣。</li>
-      <li>周一至周四每天手机 <em>40 分钟</em>，到时上锁，固定不抵扣。</li>
-      <li>周末每天 = <em>120 + 本周结算</em>；周六日睡觉不考核。</li>
-      <li>考试：每进步 1 名 <em>+1 分钟</em>/天，退步 1 名 <em>−1 分钟</em>/天。</li>
-      <li>连续奖励：连续 <em>3 周</em>考核日全部 11:00 前睡 → 周末每天再 <em>+30</em>（可累积：满 6 周 +60）；中途晚睡则重新计数。</li>
-      <li>封顶：周末每天上限 <em>180 分钟</em>；超出部分不清零，存入<em>学期存钱罐</em>。</li>
-      <li>存钱罐：学期末按 <em>1 积分 = 1 分钟</em>兑换假期手机时间（兑换方式学期末双方商定）。</li>
-      <li>每周结算一次，有异议当场谈，谈定签字生效。</li>
-    </ol>
+    <ol id="termsList"></ol>
+    <button class="rules-edit-btn" onclick="askEditRules()">
+      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M13 5.5l5.5 5.5"/><path d="M4 20l1-4L16.5 4.5a2.12 2.12 0 0 1 3 3L8 19l-4 1z"/></svg>
+      编辑约定 · 协商后写入，换家庭也能用
+    </button>
   </details>
 
   </div><!-- /viewWeek -->
@@ -555,13 +597,30 @@ const DAYS = [
   { key:'sun', name:'周日', sub:'不考核', special:true, noscore:true },
 ];
 
-function calc(v) { // 熄灯时间 "HH:MM" → 结算分钟（以 23:00 为锚全程线性）
+function calc(v) { // 熄灯时间 "HH:MM" → 结算分钟（以约定锚点为轴全程线性）
   if (!v) return null;
   const [h, m] = v.split(':').map(Number);
   let t = h * 60 + m;
-  if (t < 360) t += 24 * 60;              // 0:00–5:59 视为跨午夜：比当晚 23:00 更晚睡（00:30 = −90，不是 +1350）
-  return 23 * 60 - t;                     // 23:00 前 = +早睡分钟，23:00 后 = −晚睡分钟
+  if (t < 360) t += 24 * 60;              // 0:00–5:59 视为跨午夜：比当晚锚点更晚睡（00:30 = −90，不是 +1350）
+  return getRules().anchor - t;           // 锚点前 = +早睡分钟，锚点后 = −晚睡分钟
 }
+
+// ===== 约定参数（协商后可改，换家庭也能用）=====
+const DEFAULT_RULES = {
+  anchor: 23 * 60,   // 熄灯锚点（分钟制，23:00 = 1380）
+  base: 120,         // 周末每天基数
+  examPer: 1,        // 考试每进步/退步 1 名 ±分钟
+  streakN: 3,        // 连续奖励：每满 N 周
+  streakBonus: 30,   // 每档奖励分钟
+  cap: 180,          // 周末每天封顶
+  weekdayMin: 40     // 平日每天固定手机时长（仅条款展示）
+};
+function getRules() {
+  try { return Object.assign({}, DEFAULT_RULES, JSON.parse(localStorage.getItem('mile_phone_rules') || '{}')); }
+  catch (e) { return Object.assign({}, DEFAULT_RULES); }
+}
+function saveRules(r) { localStorage.setItem('mile_phone_rules', JSON.stringify(r)); }
+const hm = mins => String(Math.floor(mins / 60)).padStart(2, '0') + ':' + String(mins % 60).padStart(2, '0'); // 1380→23:00
 
 function init() {
   migratePot();
@@ -604,10 +663,11 @@ function init() {
   if (saved.friOver) document.getElementById('friOver').value = saved.friOver;
   if (saved.streak !== undefined) document.getElementById('streak').value = saved.streak;
   if (saved.holiDays) document.getElementById('holiDays').value = saved.holiDays;
+  renderTerms();
   render();
 }
 
-const CAP = 180; // 周末每天封顶，超出自动入学期存钱罐
+// 封顶等参数见 DEFAULT_RULES / getRules()，协商后可在「我们的约定」里修改
 
 // ===== 周次日期选择：选任意一天 → 换算所在周的周一~周日 =====
 function updateWeekRange() {
@@ -728,16 +788,19 @@ function savePot() { // 本周溢出存入存钱罐（每周一次），记流�
   render(); renderPotView();
 }
 
-function calcOver() { // 本周溢出 = 原算额度 − 封顶
+function calcOver() { // 本周溢出 = 原算额度 − 封顶（约定值不参与存罐计算）
+  const R = getRules();
   let sum = 0;
   DAYS.forEach(d => { if (!d.noscore && d.key !== 'fri') sum += calc(document.getElementById('in_' + d.key).value) || 0; });
   const exam = parseInt(document.getElementById('examDelta').value || 0);
   const streak = Math.max(0, parseInt(document.getElementById('streak').value || 0));
-  const raw = 120 + sum + exam + Math.floor(streak / 3) * 30;
-  return Math.max(0, raw - CAP);
+  const raw = Math.max(0, R.base + sum + exam * R.examPer + Math.floor(streak / R.streakN) * R.streakBonus);
+  return Math.max(0, raw - R.cap);
 }
 
 function render() {
+  const R = getRules();
+  const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
   let sum = 0, allScored = true, allOk = true;
   DAYS.forEach(d => {
     const bd = document.getElementById('bd_' + d.key);
@@ -753,19 +816,26 @@ function render() {
   const exam = parseInt(document.getElementById('examDelta').value || 0);
   const over = parseInt(document.getElementById('friOver').value || 0);
   const streak = Math.max(0, parseInt(document.getElementById('streak').value || 0));
-  const streakBonus = Math.floor(streak / 3) * 30;
+  const streakBonus = Math.floor(streak / R.streakN) * R.streakBonus;
+  const examMins = exam * R.examPer;
   document.getElementById('sumSleep').textContent = (sum > 0 ? '+' : '') + sum + ' 分钟';
-  document.getElementById('sumExam').textContent = (exam > 0 ? '+' : '') + exam + ' 分钟';
+  document.getElementById('sumExam').textContent = (examMins > 0 ? '+' : '') + examMins + ' 分钟';
   document.getElementById('sumStreak').textContent = (streakBonus > 0 ? '+' : '') + streakBonus + ' 分钟';
   document.getElementById('streakRes').textContent = (streakBonus > 0 ? '+' : '') + streakBonus + ' 分钟/天';
   document.getElementById('weekHit').style.display = (allScored && allOk) ? 'block' : 'none';
-  const raw = Math.max(0, 120 + sum + exam + streakBonus);
-  const fin = Math.min(raw, CAP);
+  const raw = Math.max(0, R.base + sum + examMins + streakBonus);
+  const auto = Math.min(raw, R.cap);
+  const custom = parseInt(store.customFin || 0);
+  const fin = custom > 0 ? custom : auto;
   document.getElementById('sumFinal').textContent = fin;
-  document.getElementById('sumTip').textContent = raw > CAP
-    ? `原算 ${raw} 分钟，按封顶 180 执行，超出 ${raw - CAP} 分钟可存入存钱罐。`
-    : '周六、周日各按此额度执行（上限 180）；额度最低为 0，不会倒欠。结算后记得在纸质表上签字确认。';
-  document.getElementById('examRes').textContent = (exam > 0 ? '+' : '') + exam + ' 分钟/天';
+  const flag = document.getElementById('finFlag');
+  flag.style.display = custom > 0 ? '' : 'none';
+  document.getElementById('sumTip').textContent = custom > 0
+    ? `已按协商约定执行 ${custom} 分钟/天（公式原算 ${auto}）。归档后自动恢复公式计算。`
+    : raw > R.cap
+      ? `原算 ${raw} 分钟，按封顶 ${R.cap} 执行，超出 ${raw - R.cap} 分钟可存入存钱罐。也可点「约定」手动定额度。`
+      : `周六、周日各按此额度执行（上限 ${R.cap}）；额度最低为 0，不会倒欠。也可点「约定」手动定额度。`;
+  document.getElementById('examRes').textContent = (examMins > 0 ? '+' : '') + examMins + ' 分钟/天';
   const cut = 24 * 60 - over;
   document.getElementById('friRes').textContent =
     over > 0 ? `${String(Math.floor(cut/60)).padStart(2,'0')}:${String(cut%60).padStart(2,'0')}` : '24:00';
@@ -784,9 +854,10 @@ function updatePotUI() { // 同步：本周状态条、存钱罐视图、tab 角
   // 本周溢出（周一~周四 + 考试 + 连续，共 raw − CAP）
   let sum = 0;
   DAYS.forEach(d => { if (!d.noscore && d.key !== 'fri') sum += calc(document.getElementById('in_' + d.key).value) || 0; });
+  const R = getRules();
   const exam = parseInt(document.getElementById('examDelta').value || 0);
   const streak = Math.max(0, parseInt(document.getElementById('streak').value || 0));
-  const thisOver = Math.max(0, 120 + sum + exam + Math.floor(streak / 3) * 30 - CAP);
+  const thisOver = Math.max(0, R.base + sum + exam * R.examPer + Math.floor(streak / R.streakN) * R.streakBonus - R.cap);
   document.getElementById('psOver').textContent = thisOver;
   document.getElementById('psOverWrap').style.display = (thisOver > 0 || potSaved) ? '' : 'none';
   const psBtn = document.getElementById('psBtn');
@@ -817,12 +888,14 @@ function askArchive() {
 function collectWeekSnap() {
   let sum = 0;
   DAYS.forEach(d => { if (!d.noscore && d.key !== 'fri') sum += calc(document.getElementById('in_' + d.key).value) || 0; });
+  const R = getRules();
+  const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
   const exam = parseInt(document.getElementById('examDelta').value || 0);
   const streak = Math.max(0, parseInt(document.getElementById('streak').value || 0));
-  const streakBonus = Math.floor(streak / 3) * 30;
-  const raw = Math.max(0, 120 + sum + exam + streakBonus);
-  const fin = Math.min(raw, CAP);
-  const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
+  const streakBonus = Math.floor(streak / R.streakN) * R.streakBonus;
+  const raw = Math.max(0, R.base + sum + exam * R.examPer + streakBonus);
+  const custom = parseInt(store.customFin || 0);
+  const fin = custom > 0 ? custom : Math.min(raw, R.cap);
   const days = {};
   DAYS.forEach(d => days[d.key] = document.getElementById('in_' + d.key).value || '');
   const d = new Date(), p = n => String(n).padStart(2, '0');
@@ -830,8 +903,8 @@ function collectWeekSnap() {
     week: weekDisplay() || '未命名周',
     archivedAt: `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())}`,
     days, exam, friOver: parseInt(document.getElementById('friOver').value || 0),
-    streak, streakBonus, sum, raw, fin,
-    overflow: Math.max(0, raw - CAP),
+    streak, streakBonus, sum, raw, fin, customFin: custom,
+    overflow: Math.max(0, raw - R.cap),
     potSaved: !!store.potSaved
   };
 }
@@ -914,25 +987,139 @@ function renderPotView() {
 }
 
 function copyResult() {
+  const R = getRules();
   let sum = 0;
   DAYS.forEach(d => { if (!d.noscore && d.key !== 'fri') sum += calc(document.getElementById('in_' + d.key).value) || 0; });
   const exam = parseInt(document.getElementById('examDelta').value || 0);
   const streak = Math.max(0, parseInt(document.getElementById('streak').value || 0));
-  const streakBonus = Math.floor(streak / 3) * 30;
-  const raw = Math.max(0, 120 + sum + exam + streakBonus);
-  const fin = Math.min(raw, 180);
+  const streakBonus = Math.floor(streak / R.streakN) * R.streakBonus;
+  const examMins = exam * R.examPer;
+  const raw = Math.max(0, R.base + sum + examMins + streakBonus);
   const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
+  const custom = parseInt(store.customFin || 0);
+  const fin = custom > 0 ? custom : Math.min(raw, R.cap);
   const pot = getPot();
-  const thisOver = Math.max(0, raw - 180);
+  const thisOver = Math.max(0, raw - R.cap);
   const over = parseInt(document.getElementById('friOver').value || 0);
   const cut = 24 * 60 - over;
   const friCut = over > 0 ? `，下周五自由夜提前到 ${String(Math.floor(cut/60)).padStart(2,'0')}:${String(cut%60).padStart(2,'0')}` : '';
-  const capNote = raw > 180 ? `（原算 ${raw} 分钟，按封顶 180 执行，超出 ${thisOver} 分钟存罐）` : '';
+  const capNote = raw > R.cap ? `（原算 ${raw} 分钟，按封顶 ${R.cap} 执行，超出 ${thisOver} 分钟存罐）` : '';
+  const custNote = custom > 0 ? `（协商约定值，公式原算 ${Math.min(raw, R.cap)}）` : '';
   const potNote = `\n存钱罐：罐内累计 ${pot} 分钟${thisOver > 0 && !store.potSaved ? `（本周可再存 ${thisOver}）` : ''}`;
-  const text = `【手机时间约定 · ${weekDisplay() || '本周'}结算】\n睡觉加减：${sum > 0 ? '+' : ''}${sum} 分钟\n考试结算：${exam > 0 ? '+' : ''}${exam} 分钟\n连续达标：已 ${streak} 周，奖励 ${streakBonus > 0 ? '+' : ''}${streakBonus} 分钟\n下周末每天可用：${fin} 分钟${capNote}${potNote}${friCut}\n（确认无误后签字生效）`;
+  const text = `【手机时间约定 · ${weekDisplay() || '本周'}结算】\n睡觉加减：${sum > 0 ? '+' : ''}${sum} 分钟\n考试结算：${examMins > 0 ? '+' : ''}${examMins} 分钟\n连续达标：已 ${streak} 周，奖励 ${streakBonus > 0 ? '+' : ''}${streakBonus} 分钟\n下周末每天可用：${fin} 分钟${custNote}${capNote}${potNote}${friCut}\n（确认无误后签字生效）`;
   navigator.clipboard.writeText(text).then(() => toast('已复制，可粘贴到微信')).catch(() => {
     showCopyModal(text);
   });
+}
+
+// ===== 手动约定周末额度（协商后写入，替代公式值）=====
+function askCustomFin() {
+  const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
+  const cur = parseInt(store.customFin || 0);
+  openModal(`
+    <h4>约定下周末额度</h4>
+    <div class="m-body">结算谈妥后，把协商结果写进来，替代公式算出的数。留空或填 0 恢复公式计算，归档开始新一周后自动清除。</div>
+    <div class="m-form">
+      <input type="number" id="cfInput" inputmode="numeric" min="0" max="600" placeholder="0–600" value="${cur > 0 ? cur : ''}" style="width:100%;">
+      <div class="m-hint">当前公式算出：${document.getElementById('sumFinal').textContent} 分钟/天</div>
+    </div>
+    <div class="m-btns">
+      ${cur > 0 ? '<button class="m-btn m-cancel" id="cfClear">恢复公式</button>' : ''}
+      <button class="m-btn m-ok" id="cfOk">写入约定</button>
+    </div>`);
+  const data = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
+  document.getElementById('cfOk').onclick = () => {
+    const v = parseInt(document.getElementById('cfInput').value || 0);
+    if (v < 0 || v > 600 || isNaN(v)) { toast('请填 0–600 的数字'); return; }
+    if (v > 0) data.customFin = v; else delete data.customFin;
+    localStorage.setItem('mile_phone_week', JSON.stringify(data));
+    closeModal(); render();
+    toast(v > 0 ? `已约定 ${v} 分钟/天` : '已恢复公式计算');
+  };
+  const clr = document.getElementById('cfClear');
+  if (clr) clr.onclick = () => {
+    delete data.customFin;
+    localStorage.setItem('mile_phone_week', JSON.stringify(data));
+    closeModal(); render(); toast('已恢复公式计算');
+  };
+}
+
+// ===== 我们的约定：条款渲染 + 编辑（协商后写入）=====
+function defaultTerms(R) {
+  const a = hm(R.anchor);
+  return [
+    `周一至周四 <em>${a}</em> 熄灯为基准：早睡 <em>1 分钟换 1 分钟</em>（22:38 睡 = 周末每天 <em>+22</em>）；${a} 后睡 <em>晚 1 分钟扣 1 分钟</em>（23:30 = −30）。`,
+    `周五<em>自由夜</em>：补课结束玩到 24:00，超时部分从<em>下周五</em>自由时长扣。`,
+    `周一至周四每天手机 <em>${R.weekdayMin} 分钟</em>，到时上锁，固定不抵扣。`,
+    `周末每天 = <em>${R.base} + 本周结算</em>；周六日睡觉不考核。`,
+    `考试：每进步 1 名 <em>+${R.examPer} 分钟</em>/天，退步 1 名 <em>−${R.examPer} 分钟</em>/天。`,
+    `连续奖励：连续 <em>${R.streakN} 周</em>考核日全部 ${a} 前睡 → 周末每天再 <em>+${R.streakBonus}</em>（可累积）；中途晚睡则重新计数。`,
+    `封顶：周末每天上限 <em>${R.cap} 分钟</em>；超出部分不清零，存入<em>学期存钱罐</em>。`,
+    `存钱罐：学期末按 <em>1 积分 = 1 分钟</em>兑换假期手机时间（兑换方式学期末双方商定）。`,
+    `每周结算一次，有异议当场谈，谈定签字生效；协商结果由双方确认后写入本页。`
+  ];
+}
+function renderTerms() {
+  const R = getRules();
+  const raw = JSON.parse(localStorage.getItem('mile_phone_rules') || '{}');
+  const terms = raw.terms || defaultTerms(R);
+  document.getElementById('termsList').innerHTML = terms.map(t => `<li>${t}</li>`).join('');
+  document.getElementById('rulesDate').textContent = raw.editedAt ? `修改于 ${raw.editedAt}` : '';
+}
+function askEditRules() {
+  const R = getRules();
+  const raw = JSON.parse(localStorage.getItem('mile_phone_rules') || '{}');
+  const termsText = (raw.terms || defaultTerms(R)).map(t => t.replace(/<\/?em>/g, '')).join('\n');
+  openModal(`
+    <h4>编辑约定</h4>
+    <div class="m-body">数字是计算规则，文字是条款内容——改完数字记得把对应条款文字也改一致。</div>
+    <div class="m-grid">
+      <label>熄灯锚点<input type="time" id="rgAnchor" value="${hm(R.anchor)}"></label>
+      <label>周末基数<input type="number" id="rgBase" inputmode="numeric" value="${R.base}"></label>
+      <label>考试每名±<input type="number" id="rgExam" inputmode="numeric" value="${R.examPer}"></label>
+      <label>连续满几周<input type="number" id="rgStreakN" inputmode="numeric" value="${R.streakN}"></label>
+      <label>每档奖励<input type="number" id="rgStreakB" inputmode="numeric" value="${R.streakBonus}"></label>
+      <label>周末封顶<input type="number" id="rgCap" inputmode="numeric" value="${R.cap}"></label>
+      <label>平日每天<input type="number" id="rgWeekday" inputmode="numeric" value="${R.weekdayMin}"></label>
+    </div>
+    <div class="m-body" style="margin-top:12px;">条款文字（每行一条，可增删改）：</div>
+    <textarea id="rgTerms" rows="9">${termsText}</textarea>
+    <div class="m-btns">
+      <button class="m-btn m-cancel" id="rgReset">恢复默认</button>
+      <button class="m-btn m-ok" id="rgSave">保存约定</button>
+    </div>`);
+  document.getElementById('rgSave').onclick = () => {
+    const R2 = getRules();
+    const anchorV = document.getElementById('rgAnchor').value;
+    if (!/^\d{1,2}:\d{2}$/.test(anchorV)) { toast('锚点时间格式不对'); return; }
+    const [ah, am] = anchorV.split(':').map(Number);
+    if (am > 59) { toast('锚点时间格式不对'); return; }
+    const num = (id, min, max, fb) => { const v = parseInt(document.getElementById(id).value); return (isNaN(v) || v < min || v > max) ? fb : v; };
+    const nr = {
+      anchor: Math.min(1439, Math.max(0, ah * 60 + am)),
+      base: num('rgBase', 0, 600, R2.base),
+      examPer: num('rgExam', 0, 60, R2.examPer),
+      streakN: Math.max(1, num('rgStreakN', 1, 12, R2.streakN)),
+      streakBonus: num('rgStreakB', 0, 300, R2.streakBonus),
+      cap: num('rgCap', 0, 600, R2.cap),
+      weekdayMin: num('rgWeekday', 0, 300, R2.weekdayMin)
+    };
+    // 条款联动：文本没手改过 → 用新参数重渲染默认条款；手改过 → 尊重用户文字
+    const norm = s => s.split('\n').map(x => x.trim()).filter(Boolean).join('\n');
+    const inputLines = document.getElementById('rgTerms').value.split('\n').map(x => x.trim()).filter(Boolean);
+    const untouched = norm(inputLines.join('\n')) === norm(termsText.replace(/<\/?em>/g, ''));
+    const terms = untouched ? defaultTerms(nr).map(esc) : inputLines.map(esc);
+    if (!terms.length) { toast('条款至少留一条'); return; }
+    const d = new Date(), p = n => String(n).padStart(2, '0');
+    saveRules(Object.assign({}, nr, { terms, editedAt: `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())}` }));
+    closeModal(); renderTerms(); render();
+    toast(untouched ? '约定已保存，条款已按新规则同步' : '约定已保存，即刻生效');
+  };
+  document.getElementById('rgReset').onclick = () => {
+    localStorage.removeItem('mile_phone_rules');
+    closeModal(); renderTerms(); render();
+    toast('已恢复默认约定');
+  };
 }
 
 // ===== 自定义模态（替代原生 confirm / prompt）=====
