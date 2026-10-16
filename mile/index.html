@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -8,68 +10,67 @@
 <meta http-equiv="Expires" content="0">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#E8734A">
+<meta name="theme-color" content="#E7D9FF">
 <meta name="apple-mobile-web-app-title" content="米乐的账本">
 <title>米乐的账本</title>
-<!-- Design Compliance: scene=web-tool(mobile-html) · style=terracotta baseline(cream/ink-brown/single warm-orange accent #E8734A inherited from PWA) · icons=custom inline SVG line set(24grid/stroke1.75/currentColor) · type=system CJK stack, 3 levels(20/800 · 13/500 · 11/400), key numerals 900 tabular-nums · contrast>=4.5:1 body text on cream · layout=re-layered: check-in cards hero > dark verdict card(weekend allowance, emotional peak) > secondary cards(exam/fri/streak/pot) > folded terms · motion=restrained(press scale, badge color transition, verdict fade-in, reduced-motion respected) · JS calc & localStorage untouched (mile_phone_week / mile_phone_pot), control ids unchanged, confirm()/prompt() replaced by custom modal -->
+<!-- Design Compliance: scene=web-tool(mobile-html) · style=glass-dopamine(milky multicolor blob bg: pink/lemon/sky/mint · frosted glass cards blur20+saturate1.6 · gradient verdict cards purple->pink / sky->purple · floating bottom tabbar pill) · radius=18~26 large · type=system CJK stack, key numerals 900 tabular-nums · contrast>=4.5:1 body text on glass · layout=re-layered: check-in hero > gradient verdict card(+pot strip + archive/copy actions in-card) > folded bonus section(exam/fri/streak) > folded terms · bottom floating tabbar(thumb zone) · JS calc & localStorage untouched (mile_phone_week / mile_phone_pot / mile_phone_hist / mile_phone_rules), control ids unchanged, custom modal kept -->
 <style>
   :root {
-    --bg: #F7F1E8;
-    --surface: #FFFFFF;
-    --surface-warm: #FCF4EA;
-    --ink: #3B2A1E;
-    --ink-2: #6E5A4A;
-    --ink-3: #7D6956;
-    --line: #EADFD2;
-    --accent: #E8734A;
-    --accent-deep: #C4552E;
-    --accent-soft: #FBE9DE;
-    --plus-bg: #E9F3EA;
-    --plus-ink: #1E7A46;
-    --minus-bg: #FBE9E2;
-    --minus-ink: #B93B24;
-    --neutral-bg: #F3ECE1;
-    --dark-card: #362619;
-    --dark-ink: #F5EDE3;
-    --dark-sub: #C9B49E;
-    --dark-num: #FFAD7E;
-    --shadow: 0 1px 3px rgba(59,42,30,.05), 0 4px 14px rgba(59,42,30,.05);
+    --ink: #322B4E;
+    --ink-2: #5E5680;
+    --ink-3: #8B84A8;
+    --accent: #8B5CF6;
+    --accent-deep: #7C3AED;
+    --pink: #EC4899;
+    --plus-bg: rgba(16,185,129,.16);
+    --plus-ink: #047857;
+    --minus-bg: rgba(244,63,94,.13);
+    --minus-ink: #BE123C;
+    --neutral-bg: rgba(120,110,160,.12);
+    --glass: rgba(255,255,255,.58);
+    --glass-strong: rgba(255,255,255,.74);
+    --glass-border: rgba(255,255,255,.78);
+    --line: rgba(139,102,241,.26);
+    --line-soft: rgba(120,100,180,.16);
+    --shadow: 0 8px 30px rgba(124,77,255,.10);
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html { -webkit-text-size-adjust:100%; }
   body {
     font-family:"PingFang SC","HarmonyOS Sans SC","MiSans","Noto Sans SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
-    background:var(--bg); color:var(--ink);
-    min-height:100vh; padding:calc(14px + env(safe-area-inset-top)) 14px calc(40px + env(safe-area-inset-bottom));
+    color:var(--ink);
+    min-height:100vh; padding:calc(14px + env(safe-area-inset-top)) 14px calc(104px + env(safe-area-inset-bottom));
     font-size:13px; line-height:1.55;
+    background:#F0EAFF;
+  }
+  body::before {
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(620px 440px at 10% 6%, rgba(255,124,189,.50), transparent 64%),
+      radial-gradient(540px 400px at 90% 12%, rgba(255,209,102,.52), transparent 64%),
+      radial-gradient(560px 460px at 82% 58%, rgba(122,162,255,.46), transparent 64%),
+      radial-gradient(620px 500px at 12% 90%, rgba(110,231,183,.46), transparent 64%),
+      linear-gradient(168deg, #FFE4F1 0%, #F0E9FF 46%, #DFF2FF 100%);
   }
   .wrap { max-width:520px; margin:0 auto; }
   b, strong { font-weight:800; }
-  input, button { font-family:inherit; color:var(--ink); }
+  input, button, textarea { font-family:inherit; color:var(--ink); }
   button { border:none; cursor:pointer; background:none; }
-  input:focus-visible, button:focus-visible, summary:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  input:focus-visible, button:focus-visible, summary:focus-visible, textarea:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
   input:focus { outline:none; }
   .icon { width:1.25em; height:1.25em; stroke:currentColor; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; fill:none; flex:none; }
   .num { font-variant-numeric:tabular-nums; }
 
   /* ===== 页头 ===== */
-  .head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
-  .head .title h1 { font-size:21px; font-weight:900; letter-spacing:.5px; line-height:1.3; }
-  .head .title p { font-size:11px; font-weight:500; color:var(--accent-deep); margin-top:2px; letter-spacing:1px; }
-  .head .btns { display:flex; gap:8px; flex:none; padding-top:2px; }
-  .icon-btn {
-    width:36px; height:36px; border-radius:11px; background:var(--surface);
-    color:var(--ink-2); display:flex; align-items:center; justify-content:center;
-    box-shadow:var(--shadow); border:1px solid var(--line);
-    transition:transform .15s ease, color .15s ease;
-  }
-  .icon-btn:active { transform:scale(.92); color:var(--accent-deep); }
-  .icon-btn .icon { width:17px; height:17px; }
+  .head { margin-bottom:16px; padding:2px 4px 0; }
+  .head .title h1 { font-size:23px; font-weight:900; letter-spacing:.5px; line-height:1.3; }
+  .head .title p { font-size:11px; font-weight:600; color:var(--accent-deep); margin-top:3px; letter-spacing:1.5px; }
 
   .week-pill {
     display:flex; align-items:center; gap:9px;
-    background:var(--surface); border:1px solid var(--line); border-radius:13px;
-    padding:9px 14px; margin-bottom:18px; box-shadow:var(--shadow);
+    background:var(--glass); -webkit-backdrop-filter:blur(20px) saturate(1.6); backdrop-filter:blur(20px) saturate(1.6);
+    border:1px solid var(--glass-border); border-radius:18px;
+    padding:10px 14px; margin-bottom:16px; box-shadow:var(--shadow);
   }
   .week-pill .icon { color:var(--accent-deep); }
   .week-pill label { font-size:11px; font-weight:700; color:var(--ink-3); white-space:nowrap; }
@@ -83,37 +84,39 @@
     -webkit-appearance:none; opacity:0; position:absolute; width:0; height:0;
   }
   .week-range { flex:1; min-width:0; font-size:12.5px; font-weight:700; color:var(--accent-deep); text-align:right; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .week-range:empty::before { content:"选日期自动算周一到周日"; font-weight:500; color:#B8A896; font-size:11px; }
+  .week-range:empty::before { content:"选日期自动算周一到周日"; font-weight:500; color:var(--ink-3); font-size:11px; }
   .week-quick {
-    flex:none; font-family:inherit; font-size:11px; font-weight:700; color:var(--accent-deep);
-    background:var(--accent-soft); border:none; border-radius:999px; padding:6px 11px; line-height:1;
+    flex:none; font-family:inherit; font-size:11px; font-weight:700; color:#fff;
+    background:linear-gradient(135deg,#8B5CF6,#EC4899); border:none; border-radius:999px; padding:6px 12px; line-height:1;
+    box-shadow:0 4px 14px rgba(139,92,246,.32);
   }
   .week-quick:active { transform:scale(.94); }
 
   /* ===== 区块头 ===== */
-  .sec-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin:0 2px 9px; }
+  .sec-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin:0 4px 9px; }
   .sec-head h2 { font-size:13.5px; font-weight:800; letter-spacing:.5px; display:flex; align-items:center; gap:6px; }
   .sec-head h2 .icon { width:15px; height:15px; color:var(--accent-deep); stroke-width:2; }
   .sec-head .note { font-size:10.5px; color:var(--ink-3); text-align:right; }
 
   /* ===== 主角：每晚熄灯打卡 ===== */
-  .day-group { display:flex; flex-direction:column; gap:8px; }
+  .day-group { display:flex; flex-direction:column; gap:9px; }
   .day {
-    background:var(--surface); border:1px solid var(--line); border-radius:14px;
-    padding:10px 12px; display:flex; align-items:center; gap:10px;
+    background:var(--glass); -webkit-backdrop-filter:blur(20px) saturate(1.6); backdrop-filter:blur(20px) saturate(1.6);
+    border:1px solid var(--glass-border); border-radius:18px;
+    padding:11px 13px; display:flex; align-items:center; gap:10px;
     box-shadow:var(--shadow);
   }
-  .day .dw { width:42px; flex:none; font-size:13px; font-weight:800; line-height:1.25; }
-  .day .dw small { display:block; font-size:9.5px; font-weight:500; color:var(--ink-3); letter-spacing:.3px; }
+  .day .dw { width:44px; flex:none; font-size:13px; font-weight:800; line-height:1.25; }
+  .day .dw small { display:block; font-size:9.5px; font-weight:600; color:var(--ink-3); letter-spacing:.3px; }
   .day input[type=time] {
-    flex:1; min-width:0; border:1.5px solid var(--line); border-radius:10px;
-    padding:9px 10px; font-size:15.5px; font-weight:600; background:#FDFBF7;
+    flex:1; min-width:0; border:1.5px solid var(--line); border-radius:12px;
+    padding:9px 10px; font-size:15.5px; font-weight:600; background:rgba(255,255,255,.72);
     transition:border-color .2s, box-shadow .2s;
   }
-  .day input[type=time]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(232,115,74,.14); }
+  .day input[type=time]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(139,92,246,.16); }
   .badge {
     margin-left:auto; flex:none; min-width:62px; text-align:center;
-    font-size:13.5px; font-weight:800; border-radius:9px; padding:7px 9px;
+    font-size:13.5px; font-weight:800; border-radius:12px; padding:7px 9px;
     background:var(--neutral-bg); color:var(--ink-3);
     font-variant-numeric:tabular-nums;
     transition:background-color .25s, color .25s;
@@ -121,126 +124,156 @@
   .badge.plus { background:var(--plus-bg); color:var(--plus-ink); }
   .badge.minus { background:var(--minus-bg); color:var(--minus-ink); }
 
-  .day-fri { background:var(--surface-warm); border-color:#F0D9C4; }
-  .day-fri .dw small { color:var(--accent-deep); font-weight:700; }
-  .day-fri .badge { background:var(--accent-soft); color:var(--accent-deep); }
+  .day-fri { background:rgba(255,255,255,.42); border-color:rgba(255,209,102,.65); }
+  .day-fri .dw small { color:#B45309; font-weight:700; }
+  .day-fri .badge { background:rgba(255,209,102,.32); color:#92400E; }
 
   .weekend {
-    margin-top:8px; border:1.5px dashed #DFCFBB; border-radius:14px;
-    padding:11px 12px 10px; background:rgba(255,255,255,.5);
+    margin-top:9px; border:1.5px dashed rgba(139,102,241,.4); border-radius:18px;
+    padding:11px 12px 10px; background:rgba(255,255,255,.34);
   }
   .weekend .wk-row { display:flex; align-items:center; gap:9px; }
   .weekend .wk-row + .wk-row { margin-top:8px; }
-  .weekend .wk-name { width:42px; flex:none; font-size:12.5px; font-weight:800; color:var(--ink-2); }
+  .weekend .wk-name { width:44px; flex:none; font-size:12.5px; font-weight:800; color:var(--ink-2); }
   .weekend .badge { display:none; }
   .weekend input[type=time] {
-    flex:1; min-width:0; border:1.5px solid var(--line); border-radius:10px;
-    padding:8px 10px; font-size:15px; font-weight:600; background:#FDFBF7;
+    flex:1; min-width:0; border:1.5px solid var(--line); border-radius:12px;
+    padding:8px 10px; font-size:15px; font-weight:600; background:rgba(255,255,255,.72);
     transition:border-color .2s, box-shadow .2s;
   }
-  .weekend input[type=time]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(232,115,74,.14); }
+  .weekend input[type=time]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(139,92,246,.16); }
   .weekend .wk-note { margin-top:9px; font-size:10.5px; color:var(--ink-3); text-align:center; }
 
-  /* ===== 情绪顶点：本周结算 ===== */
+  /* ===== 情绪顶点：本周结算（渐变玻璃） ===== */
   .verdict {
-    margin-top:18px; background:var(--dark-card); border-radius:18px;
-    padding:18px 18px 15px; color:var(--dark-ink);
-    box-shadow:0 6px 22px rgba(54,38,25,.28);
+    margin-top:18px;
+    background:linear-gradient(135deg, rgba(139,92,246,.82), rgba(236,72,153,.74));
+    -webkit-backdrop-filter:blur(22px) saturate(1.5); backdrop-filter:blur(22px) saturate(1.5);
+    border:1px solid rgba(255,255,255,.5); border-radius:26px;
+    padding:17px 18px 15px; color:#fff;
+    box-shadow:0 14px 40px rgba(139,92,246,.35);
     position:relative; overflow:hidden;
   }
   .verdict::before {
-    content:""; position:absolute; top:-70px; right:-50px; width:190px; height:190px;
-    background:radial-gradient(closest-side, rgba(232,115,74,.22), transparent 70%);
+    content:""; position:absolute; top:-80px; right:-60px; width:220px; height:220px;
+    background:radial-gradient(closest-side, rgba(255,209,102,.4), transparent 70%);
     pointer-events:none;
   }
-  .verdict .v-label { font-size:11px; font-weight:700; letter-spacing:3px; color:var(--dark-sub); }
-  .verdict .v-main { display:flex; align-items:baseline; gap:9px; margin:6px 0 4px; }
-  .verdict .v-num {
-    font-size:54px; font-weight:900; line-height:1; color:var(--dark-num);
-    font-variant-numeric:tabular-nums; letter-spacing:1px;
-    text-shadow:0 2px 14px rgba(232,115,74,.25);
+  .v-top { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+  .verdict .v-label { font-size:11px; font-weight:700; letter-spacing:2.5px; color:rgba(255,255,255,.85); }
+  .v-actions { display:flex; gap:7px; }
+  .va-btn {
+    font-family:inherit; font-size:11px; font-weight:800; letter-spacing:.5px;
+    padding:7px 13px; border-radius:999px; line-height:1;
+    background:rgba(255,255,255,.94); color:var(--accent-deep);
+    box-shadow:0 4px 14px rgba(60,20,110,.22);
+    transition:transform .15s ease;
   }
-  .verdict .v-unit { font-size:13px; font-weight:500; color:var(--dark-sub); }
-  .verdict .v-rows { margin-top:10px; border-top:1px dashed #57432F; padding-top:9px; }
-  .v-row { display:flex; justify-content:space-between; font-size:12.5px; padding:3.5px 0; color:var(--dark-sub); }
-  .v-row b { color:var(--dark-ink); font-weight:700; font-variant-numeric:tabular-nums; }
-  .v-tip { margin-top:9px; font-size:10.5px; line-height:1.7; color:#A6937F; }
+  .va-btn:active { transform:scale(.94); }
+  .va-btn.ghost { background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.45); color:#fff; box-shadow:none; }
+  .verdict .v-main { display:flex; align-items:baseline; gap:9px; margin:8px 0 4px; }
+  .verdict .v-num {
+    font-size:56px; font-weight:900; line-height:1; color:#FFE066;
+    font-variant-numeric:tabular-nums; letter-spacing:1px;
+    text-shadow:0 2px 18px rgba(255,209,102,.4);
+  }
+  .verdict .v-unit { font-size:13px; font-weight:500; color:rgba(255,255,255,.85); }
+  .verdict .v-rows { margin-top:10px; border-top:1px dashed rgba(255,255,255,.38); padding-top:9px; }
+  .v-row { display:flex; justify-content:space-between; font-size:12.5px; padding:3.5px 0; color:rgba(255,255,255,.82); }
+  .v-row b { color:#fff; font-weight:700; font-variant-numeric:tabular-nums; }
+  .verdict .v-tip { margin-top:9px; font-size:10.5px; line-height:1.7; color:rgba(255,255,255,.72); }
 
-  /* ===== 次级层 ===== */
-  .mini-grid { margin-top:12px; display:flex; gap:10px; }
+  .v-edit {
+    margin-left:auto; display:inline-flex; align-items:center; gap:4px;
+    background:rgba(255,255,255,.18); color:#fff;
+    font-size:11px; font-weight:700; padding:6px 11px; border-radius:999px;
+    transition:transform .15s ease, background-color .2s; flex:none; align-self:center;
+    border:1px solid rgba(255,255,255,.35);
+  }
+  .v-edit:active { transform:scale(.94); background:rgba(255,255,255,.3); }
+  .v-edit .icon { width:12px; height:12px; }
+  .fin-flag {
+    display:inline-block; background:#FFE066; color:#92400E;
+    font-size:9px; font-weight:800; letter-spacing:.5px;
+    padding:2px 8px; border-radius:999px; vertical-align:1px; margin-left:4px;
+  }
+
+  /* verdict 卡内：存钱罐状态行 */
+  .pot-strip {
+    display:flex; align-items:center; gap:7px; margin-top:11px;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3);
+    border-radius:14px;
+    padding:8px 12px; font-size:12px; color:rgba(255,255,255,.88);
+  }
+  .pot-strip .icon { width:15px; height:15px; color:#FFE066; flex:none; }
+  .pot-strip b { color:#fff; font-variant-numeric:tabular-nums; }
+  .pot-strip .sp { flex:1; }
+
+  .pot-btn {
+    background:#fff; color:var(--accent-deep); font-size:12px; font-weight:800;
+    padding:7px 14px; border-radius:999px; letter-spacing:.5px;
+    transition:transform .15s ease, opacity .2s;
+    box-shadow:0 4px 12px rgba(60,20,110,.18);
+  }
+  .pot-btn:active:not(:disabled) { transform:scale(.95); }
+  .pot-btn:disabled { opacity:.45; }
+
+  /* ===== 本周加分项（折叠） ===== */
+  .bonus {
+    margin-top:14px;
+    background:var(--glass); -webkit-backdrop-filter:blur(20px) saturate(1.6); backdrop-filter:blur(20px) saturate(1.6);
+    border:1px solid var(--glass-border); border-radius:22px;
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  .bonus summary {
+    padding:13px 16px; font-size:13px; font-weight:800; color:var(--accent-deep);
+    cursor:pointer; list-style:none; display:flex; align-items:center; gap:7px;
+  }
+  .bonus summary::-webkit-details-marker { display:none; }
+  .bonus summary .icon { width:16px; height:16px; stroke-width:2; }
+  .bonus summary .sum-note { margin-left:auto; font-size:10px; font-weight:600; color:var(--ink-3); letter-spacing:.3px; }
+  .bonus summary .chev { width:15px; height:15px; margin-left:2px; transition:transform .25s ease; color:var(--ink-3); }
+  .bonus[open] summary .chev { transform:rotate(180deg); }
+  .bonus-body { padding:2px 12px 12px; display:flex; flex-direction:column; gap:9px; }
+
   .card {
-    background:var(--surface); border:1px solid var(--line); border-radius:14px;
-    padding:12px 13px; box-shadow:var(--shadow);
+    background:rgba(255,255,255,.55); border:1px solid rgba(255,255,255,.7);
+    border-radius:16px; padding:12px 13px;
   }
   .card h3 { font-size:12.5px; font-weight:800; color:var(--ink); display:flex; align-items:center; gap:6px; margin-bottom:8px; letter-spacing:.3px; }
   .card h3 .icon { width:15px; height:15px; color:var(--accent-deep); }
   .row { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-2); margin-bottom:6px; flex-wrap:wrap; line-height:1.5; }
   .row:last-child { margin-bottom:0; }
   .card input[type=number] {
-    width:54px; border:1.5px solid var(--line); border-radius:8px; padding:5px 6px;
-    font-size:14px; font-weight:700; text-align:center; background:#FDFBF7; outline:none;
+    width:54px; border:1.5px solid var(--line); border-radius:10px; padding:5px 6px;
+    font-size:14px; font-weight:700; text-align:center; background:rgba(255,255,255,.72); outline:none;
     transition:border-color .2s, box-shadow .2s;
   }
-  .card input[type=number]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(232,115,74,.14); }
+  .card input[type=number]:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(139,92,246,.16); }
   .ex-res { font-size:12.5px; font-weight:800; color:var(--accent-deep); font-variant-numeric:tabular-nums; }
   .wide { width:100%; }
 
   #weekHit { color:var(--plus-ink) !important; font-weight:700; align-items:center; }
   #weekHit .icon { width:14px; height:14px; stroke-width:2.2; vertical-align:-2px; margin-right:2px; }
+  .streak-pill { appearance:none; -webkit-appearance:none; background:rgba(139,92,246,.10); border:1px solid rgba(139,92,246,.35); color:var(--accent-deep); font-weight:800; border-radius:999px; text-align:center; cursor:pointer; min-width:44px; }
+  .streak-pill::-webkit-outer-spin-button, .streak-pill::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+  .streak-tag { font-size:10px; padding:1.5px 8px; border-radius:999px; background:rgba(16,185,129,.15); color:var(--plus-ink); font-weight:600; white-space:nowrap; }
+  .streak-tag.manual { background:rgba(217,119,6,.16); color:#B45309; }
 
-  /* 存钱罐 */
-  .pot-val { font-size:17px; font-weight:900; color:var(--accent-deep); font-variant-numeric:tabular-nums; }
-  .pot-btn {
-    background:var(--accent); color:#fff; font-size:12px; font-weight:700;
-    padding:7px 14px; border-radius:9px; letter-spacing:.5px;
-    transition:transform .15s ease, background-color .2s;
-  }
-  .pot-btn:active:not(:disabled) { transform:scale(.95); background:var(--accent-deep); }
   .btn-min {
-    background:var(--surface); color:var(--ink-2); font-size:11.5px; font-weight:600;
-    padding:6px 11px; border-radius:9px; border:1px solid var(--line);
+    background:rgba(255,255,255,.7); color:var(--ink-2); font-size:11.5px; font-weight:700;
+    padding:6px 11px; border-radius:999px; border:1px solid var(--line);
     display:inline-flex; align-items:center; gap:4px;
     transition:transform .15s ease, color .15s ease;
   }
   .btn-min:active { transform:scale(.94); color:var(--accent-deep); }
   .btn-min .icon { width:12px; height:12px; }
-  .pot-tip { font-size:10.5px; color:var(--ink-3); }
-
-  /* ===== 三视图 tab ===== */
-  .tabs {
-    display:flex; gap:4px; background:var(--surface); border:1px solid var(--line);
-    border-radius:13px; padding:4px; margin-bottom:14px; box-shadow:var(--shadow);
-  }
-  .tab {
-    flex:1; border:none; background:none; font-family:inherit;
-    font-size:12.5px; font-weight:700; color:var(--ink-3); padding:8px 0;
-    border-radius:9px; display:flex; align-items:center; justify-content:center; gap:5px;
-    transition:background-color .2s, color .2s, transform .15s ease;
-  }
-  .tab .icon { width:14px; height:14px; }
-  .tab.on { background:var(--accent); color:#fff; }
-  .tab:active { transform:scale(.97); }
-  .tab .cnt {
-    font-size:9.5px; font-weight:800; background:var(--neutral-bg); color:var(--ink-3);
-    border-radius:999px; padding:1px 5.5px; line-height:1.5;
-  }
-  .tab.on .cnt { background:rgba(255,255,255,.28); color:#fff; }
-  .tab .cnt:empty { display:none; }
-
-  /* ===== 本周视图：存钱罐状态条 ===== */
-  .pot-strip {
-    display:flex; align-items:center; gap:7px; margin-top:10px;
-    background:var(--surface); border:1px solid var(--line); border-radius:12px;
-    padding:9px 12px; font-size:12px; color:var(--ink-2); box-shadow:var(--shadow);
-  }
-  .pot-strip .icon { width:15px; height:15px; color:var(--accent-deep); flex:none; }
-  .pot-strip b { color:var(--ink); font-variant-numeric:tabular-nums; }
-  .pot-strip .sp { flex:1; }
 
   /* ===== 历史视图 ===== */
   .hist-card {
-    background:var(--surface); border:1px solid var(--line); border-radius:14px;
-    padding:12px 14px; margin-bottom:9px; box-shadow:var(--shadow);
+    background:var(--glass); -webkit-backdrop-filter:blur(20px) saturate(1.6); backdrop-filter:blur(20px) saturate(1.6);
+    border:1px solid var(--glass-border); border-radius:20px;
+    padding:12px 14px; margin-bottom:10px; box-shadow:var(--shadow);
     transition:transform .15s ease;
   }
   .hist-card:active { transform:scale(.985); }
@@ -251,37 +284,53 @@
   .hist-fin b { font-size:21px; font-weight:900; color:var(--accent-deep); font-variant-numeric:tabular-nums; line-height:1.1; }
   .hist-fin small { display:block; font-size:9.5px; color:var(--ink-3); }
   .hist-rows {
-    margin-top:9px; padding-top:9px; border-top:1px dashed var(--line);
+    margin-top:9px; padding-top:9px; border-top:1px dashed var(--line-soft);
     display:flex; flex-wrap:wrap; gap:4px 12px; font-size:11px; color:var(--ink-2);
   }
   .hist-rows b { color:var(--ink); font-variant-numeric:tabular-nums; }
-  .hist-hint { margin-top:7px; font-size:10px; color:#B8A896; display:flex; align-items:center; gap:4px; }
+  .hist-hint { margin-top:7px; font-size:10px; color:var(--ink-3); display:flex; align-items:center; gap:4px; }
   .hist-hint .icon { width:11px; height:11px; transition:transform .2s; }
   .hist-card.open .hist-hint .icon { transform:rotate(180deg); }
-  .hist-det { display:none; margin-top:8px; border-top:1px solid var(--line); padding-top:7px; }
+  .hist-det { display:none; margin-top:8px; border-top:1px solid var(--line-soft); padding-top:7px; }
   .hist-card.open .hist-det { display:block; }
   .hist-det .d-row { display:flex; justify-content:space-between; gap:10px; font-size:11.5px; padding:3.5px 0; color:var(--ink-2); }
   .hist-det .d-row b { color:var(--ink); font-variant-numeric:tabular-nums; font-weight:700; }
 
   /* ===== 存钱罐视图 ===== */
   .pot-hero {
-    background:var(--dark-card); border-radius:16px; padding:17px 16px 14px;
-    color:var(--dark-ink); margin-bottom:10px;
+    background:linear-gradient(135deg, rgba(34,211,238,.72), rgba(139,92,246,.78));
+    -webkit-backdrop-filter:blur(22px) saturate(1.5); backdrop-filter:blur(22px) saturate(1.5);
+    border:1px solid rgba(255,255,255,.5);
+    border-radius:24px; padding:17px 16px 14px;
+    color:#fff; margin-bottom:12px; position:relative; overflow:hidden;
+    box-shadow:0 14px 40px rgba(34,180,238,.28);
   }
-  .pot-hero .ph-label { font-size:11px; color:var(--dark-sub); display:flex; align-items:center; gap:6px; font-weight:500; }
+  .pot-hero::before {
+    content:""; position:absolute; top:-70px; right:-50px; width:200px; height:200px;
+    background:radial-gradient(closest-side, rgba(255,209,102,.38), transparent 70%);
+    pointer-events:none;
+  }
+  .pot-hero .ph-label { font-size:11px; color:rgba(255,255,255,.88); display:flex; align-items:center; gap:6px; font-weight:600; }
   .pot-hero .ph-label .icon { width:15px; height:15px; }
   .pot-hero .ph-main { margin-top:6px; display:flex; align-items:baseline; }
-  .pot-hero .ph-num { font-size:42px; font-weight:900; color:var(--dark-num); font-variant-numeric:tabular-nums; line-height:1.1; }
-  .pot-hero .ph-unit { font-size:12px; color:var(--dark-sub); margin-left:7px; }
-  .pot-hero .ph-sub { margin-top:9px; padding-top:9px; border-top:1px solid rgba(245,237,227,.14); font-size:11.5px; color:var(--dark-sub); display:flex; align-items:center; justify-content:space-between; gap:8px; }
-  .pot-hero .ph-sub b { color:var(--dark-ink); font-variant-numeric:tabular-nums; }
-  .pot-hero .pot-btn { flex:none; }
-  .pot-hero .pot-btn:disabled { opacity:.45; }
+  .pot-hero .ph-num { font-size:44px; font-weight:900; color:#FFE066; font-variant-numeric:tabular-nums; line-height:1.1; text-shadow:0 2px 16px rgba(255,209,102,.4); }
+  .pot-hero .ph-unit { font-size:12px; color:rgba(255,255,255,.85); margin-left:7px; }
+  .pot-hero .ph-sub { margin-top:10px; padding-top:10px; border-top:1px dashed rgba(255,255,255,.35); font-size:11.5px; color:rgba(255,255,255,.88); display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .pot-hero .ph-sub b { color:#fff; font-variant-numeric:tabular-nums; }
+  .pot-hero .ph-sub input[type=number] {
+    width:52px; padding:5px 6px; border:1.5px solid rgba(255,255,255,.45); border-radius:9px;
+    font-size:13px; font-weight:700; background:rgba(255,255,255,.28); color:#fff; outline:none;
+    text-align:center; font-variant-numeric:tabular-nums;
+  }
+  .pot-hero .ph-sub input[type=number]::placeholder { color:rgba(255,255,255,.65); }
+  .pot-hero .ph-sub input[type=number]:focus { border-color:#fff; }
+
   .log {
-    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    background:var(--glass); -webkit-backdrop-filter:blur(20px) saturate(1.6); backdrop-filter:blur(20px) saturate(1.6);
+    border:1px solid var(--glass-border); border-radius:20px;
     padding:2px 14px; box-shadow:var(--shadow);
   }
-  .log-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .log-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line-soft); }
   .log-row:last-child { border-bottom:none; }
   .log-row .l-note { flex:1; min-width:0; }
   .log-row .l-note b { display:block; font-size:12.5px; font-weight:700; }
@@ -290,113 +339,129 @@
   .log-row .l-delta.plus { color:var(--plus-ink); }
   .log-row .l-delta.minus { color:var(--minus-ink); }
   .empty { text-align:center; color:var(--ink-3); font-size:12px; padding:40px 20px; line-height:1.9; }
-  .empty .icon { width:34px; height:34px; stroke-width:1.3; color:#C9B8A5; display:block; margin:0 auto 6px; }
+  .empty .icon { width:34px; height:34px; stroke-width:1.3; color:rgba(139,102,241,.5); display:block; margin:0 auto 6px; }
   .empty.small { padding:18px 10px; font-size:11px; }
-  .sec-pad { margin-top:14px; }
+  .sec-pad { margin-top:16px; }
+  .pot-tip { font-size:10.5px; color:var(--ink-3); }
   .m-btns.col { flex-direction:column; }
   .m-btns.col .m-btn { width:100%; justify-content:center; }
 
-  /* ===== 手动约定 + 编辑约定 ===== */
-  .v-edit {
-    margin-left:auto; display:inline-flex; align-items:center; gap:4px;
-    background:rgba(255,255,255,.12); color:var(--dark-ink);
-    font-size:11px; font-weight:700; padding:6px 10px; border-radius:999px;
-    transition:transform .15s ease, background-color .2s; flex:none; align-self:center;
-  }
-  .v-edit:active { transform:scale(.94); background:rgba(255,255,255,.22); }
-  .v-edit .icon { width:12px; height:12px; }
-  .fin-flag {
-    display:inline-block; background:var(--accent); color:#fff;
-    font-size:9px; font-weight:800; letter-spacing:.5px;
-    padding:2px 8px; border-radius:999px; vertical-align:1px; margin-left:4px;
-  }
-  .m-form { margin-top:10px; }
-  .m-form input {
-    width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:10px;
-    font-size:16px; font-weight:800; background:#FDFBF7; outline:none; text-align:center;
-  }
-  .m-hint { margin-top:6px; font-size:10.5px; color:var(--ink-3); text-align:center; }
-  .m-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; margin-top:10px; }
-  .m-grid label { font-size:10.5px; color:var(--ink-2); font-weight:700; display:flex; flex-direction:column; gap:4px; }
-  .m-grid input {
-    padding:7px 9px; border:1.5px solid var(--line); border-radius:9px;
-    font-size:14px; font-weight:800; background:#FDFBF7; outline:none; width:100%;
-    font-variant-numeric:tabular-nums;
-  }
-  .m-grid input:focus, .m-form input:focus, #rgTerms:focus { border-color:var(--accent); }
-  #rgTerms {
-    width:100%; margin-top:6px; padding:9px 11px; border:1.5px solid var(--line);
-    border-radius:10px; font-size:12px; line-height:1.7; background:#FDFBF7;
-    outline:none; font-family:inherit; color:var(--ink); resize:vertical;
-  }
-  .rules-date { font-size:9.5px; color:var(--ink-3); font-weight:500; margin-left:6px; }
-  .rules-edit-btn {
-    display:flex; align-items:center; justify-content:center; gap:5px; width:100%;
-    margin-top:11px; padding:9px; border-radius:10px;
-    border:1.5px dashed #D9C4A8; color:var(--ink-2); font-size:11.5px; font-weight:700;
-    transition:color .2s, border-color .2s, transform .15s ease; background:none;
-  }
-  .rules-edit-btn:active { transform:scale(.98); color:var(--accent-deep); border-color:var(--accent); }
-  .rules-edit-btn .icon { width:13px; height:13px; }
-
-  /* ===== 条款 ===== */
+  /* ===== 约定条款 ===== */
   .rules {
-    margin-top:14px; background:var(--surface-warm);
-    border:1px solid #F0DCC4; border-radius:14px; overflow:hidden;
+    margin-top:14px;
+    background:var(--glass); -webkit-backdrop-filter:blur(20px) saturate(1.6); backdrop-filter:blur(20px) saturate(1.6);
+    border:1px solid var(--glass-border); border-radius:22px; overflow:hidden;
+    box-shadow:var(--shadow);
   }
   .rules summary {
-    padding:12px 15px; font-size:13px; font-weight:700; color:var(--accent-deep);
+    padding:13px 16px; font-size:13px; font-weight:800; color:var(--accent-deep);
     cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between;
   }
   .rules summary::-webkit-details-marker { display:none; }
-  .rules summary .icon { width:15px; height:15px; transition:transform .25s ease; }
+  .rules summary .icon { width:15px; height:15px; transition:transform .25s ease; color:var(--ink-3); }
   .rules[open] summary .icon { transform:rotate(180deg); }
   .rules ol { padding:2px 16px 14px 32px; font-size:12px; line-height:1.9; color:var(--ink-2); }
   .rules li::marker { color:var(--accent-deep); font-weight:700; }
   .rules em { font-style:normal; font-weight:700; color:var(--ink); }
+  .rules-date { font-size:9.5px; color:var(--ink-3); font-weight:500; margin-left:6px; }
+  .rules-edit-btn {
+    display:flex; align-items:center; justify-content:center; gap:5px; width:100%;
+    margin:4px 0 13px; width:calc(100% - 32px); margin-left:16px; padding:9px; border-radius:12px;
+    border:1.5px dashed rgba(139,102,241,.45); color:var(--ink-2); font-size:11.5px; font-weight:700;
+    transition:color .2s, border-color .2s, transform .15s ease; background:rgba(255,255,255,.4);
+  }
+  .rules-edit-btn:active { transform:scale(.98); color:var(--accent-deep); border-color:var(--accent); }
+  .rules-edit-btn .icon { width:13px; height:13px; }
 
   /* ===== 模态 ===== */
   .modal-mask {
-    position:fixed; inset:0; z-index:60; background:rgba(45,31,20,.45);
-    -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+    position:fixed; inset:0; z-index:60; background:rgba(50,30,90,.42);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
     display:none; align-items:center; justify-content:center; padding:28px;
   }
   .modal-mask.show { display:flex; animation:fadeIn .2s ease; }
   .modal {
-    width:100%; max-width:320px; background:var(--bg); border-radius:18px;
-    padding:20px 18px 16px; box-shadow:0 18px 48px rgba(45,31,20,.35);
+    width:100%; max-width:320px;
+    background:rgba(255,255,255,.92); -webkit-backdrop-filter:blur(28px) saturate(1.5); backdrop-filter:blur(28px) saturate(1.5);
+    border:1px solid rgba(255,255,255,.9); border-radius:24px;
+    padding:20px 18px 16px; box-shadow:0 18px 48px rgba(80,40,150,.3);
     animation:popIn .22s ease;
   }
   .modal h4 { font-size:15.5px; font-weight:800; margin-bottom:8px; }
   .modal .m-body { font-size:12.5px; color:var(--ink-2); line-height:1.75; white-space:pre-line; }
   .modal .m-btns { display:flex; gap:9px; margin-top:16px; }
   .modal .m-btn {
-    flex:1; padding:10px 0; border-radius:11px; font-size:13.5px; font-weight:700;
+    flex:1; padding:10px 0; border-radius:13px; font-size:13.5px; font-weight:700;
     transition:transform .15s ease, opacity .15s;
   }
   .modal .m-btn:active { transform:scale(.96); }
-  .m-cancel { background:var(--surface); color:var(--ink-2); border:1px solid var(--line); }
-  .m-ok { background:var(--accent); color:#fff; }
-  .m-ok.danger { background:var(--minus-ink); }
+  .m-cancel { background:rgba(255,255,255,.7); color:var(--ink-2); border:1px solid var(--line); }
+  .m-ok { background:linear-gradient(135deg,#8B5CF6,#EC4899); color:#fff; }
+  .m-ok.danger { background:linear-gradient(135deg,#F43F5E,#E11D48); }
   .modal textarea {
     width:100%; height:150px; margin-top:10px; resize:none;
-    background:var(--surface); border:1px solid var(--line); border-radius:11px;
+    background:rgba(255,255,255,.75); border:1.5px solid var(--line); border-radius:14px;
     padding:10px; font-size:12px; line-height:1.7; color:var(--ink); outline:none;
   }
   .m-hint { font-size:10.5px; color:var(--ink-3); margin-top:7px; }
+  .m-form { margin-top:10px; }
+  .m-form input {
+    width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:13px;
+    font-size:16px; font-weight:800; background:rgba(255,255,255,.75); outline:none; text-align:center;
+  }
+  .m-form input:focus { border-color:var(--accent); }
+  .m-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; margin-top:10px; }
+  .m-grid label { font-size:10.5px; color:var(--ink-2); font-weight:700; display:flex; flex-direction:column; gap:4px; }
+  .m-grid input {
+    padding:7px 9px; border:1.5px solid var(--line); border-radius:10px;
+    font-size:14px; font-weight:800; background:rgba(255,255,255,.75); outline:none; width:100%;
+    font-variant-numeric:tabular-nums;
+  }
+  .m-grid input:focus, #rgTerms:focus { border-color:var(--accent); }
+  #rgTerms {
+    width:100%; margin-top:6px; padding:9px 11px; border:1.5px solid var(--line);
+    border-radius:14px; font-size:12px; line-height:1.7; background:rgba(255,255,255,.75);
+    outline:none; font-family:inherit; color:var(--ink); resize:vertical;
+  }
   @keyframes fadeIn { from { opacity:0; } }
   @keyframes popIn { from { opacity:0; transform:scale(.92) translateY(10px); } }
 
   /* ===== toast ===== */
   .toast {
-    position:fixed; left:50%; bottom:calc(28px + env(safe-area-inset-bottom));
+    position:fixed; left:50%; bottom:calc(104px + env(safe-area-inset-bottom));
     transform:translateX(-50%); z-index:70;
-    background:#42311F; color:var(--dark-ink); font-size:12px; font-weight:500;
+    background:rgba(50,35,90,.86); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+    color:#fff; font-size:12px; font-weight:500;
     padding:9px 18px; border-radius:22px; opacity:0; transition:opacity .3s;
     pointer-events:none; max-width:80vw; text-align:center;
-    box-shadow:0 6px 20px rgba(45,31,20,.3);
+    box-shadow:0 6px 20px rgba(50,35,90,.35);
   }
-  .toast.show { opacity:.96; }
+  .toast.show { opacity:.97; }
+
+  /* ===== 底部悬浮 tab 栏 ===== */
+  .tabbar {
+    position:fixed; left:14px; right:14px; bottom:calc(10px + env(safe-area-inset-bottom));
+    z-index:50; display:flex; gap:4px;
+    background:rgba(255,255,255,.68); -webkit-backdrop-filter:blur(26px) saturate(1.7); backdrop-filter:blur(26px) saturate(1.7);
+    border:1px solid rgba(255,255,255,.85); border-radius:24px; padding:6px;
+    box-shadow:0 12px 38px rgba(124,77,255,.2);
+    max-width:492px; margin:0 auto;
+  }
+  .tab {
+    flex:1; border:none; background:none; font-family:inherit;
+    font-size:12.5px; font-weight:700; color:var(--ink-3); padding:9px 0;
+    border-radius:18px; display:flex; align-items:center; justify-content:center; gap:5px;
+    transition:background-color .2s, color .2s, transform .15s ease;
+  }
+  .tab .icon { width:14px; height:14px; }
+  .tab.on { background:linear-gradient(135deg,#8B5CF6,#EC4899); color:#fff; box-shadow:0 6px 18px rgba(139,92,246,.4); }
+  .tab:active { transform:scale(.97); }
+  .tab .cnt {
+    font-size:9.5px; font-weight:800; background:var(--neutral-bg); color:var(--ink-3);
+    border-radius:999px; padding:1px 5.5px; line-height:1.5;
+  }
+  .tab.on .cnt { background:rgba(255,255,255,.28); color:#fff; }
+  .tab .cnt:empty { display:none; }
 
   @media (prefers-reduced-motion:reduce) {
     * { animation:none !important; transition:none !important; }
@@ -406,7 +471,7 @@
     .wrap { padding:6px 8px; }
   }
 </style>
-</head>
+<link rel="icon" href="/favicon.ico?v=0"></head>
 <body>
 <div class="wrap">
 
@@ -415,35 +480,12 @@
       <h1>米乐的账本</h1>
       <p>手机时间 · 周结约定</p>
     </div>
-    <div class="btns">
-      <button class="icon-btn" onclick="askArchive()" aria-label="结算归档">
-        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
-      </button>
-      <button class="icon-btn" onclick="copyResult()" aria-label="复制结果">
-        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15h-.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
-      </button>
-    </div>
   </header>
-
-  <div class="tabs" role="tablist">
-    <button class="tab on" id="tab-week" onclick="switchTab('week')">
-      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>
-      本周
-    </button>
-    <button class="tab" id="tab-hist" onclick="switchTab('hist')">
-      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-      历史<span class="cnt" id="tabHistCnt"></span>
-    </button>
-    <button class="tab" id="tab-pot" onclick="switchTab('pot')">
-      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><ellipse cx="12" cy="6.5" rx="7" ry="3"/><path d="M5 6.5v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V6.5"/><path d="M5 12v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V12"/></svg>
-      存钱罐<span class="cnt" id="tabPotCnt"></span>
-    </button>
-  </div>
 
   <div id="viewWeek">
 
   <div class="week-pill">
-    <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>
+    <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"></rect><path d="M8 3v4M16 3v4M3.5 10h17"></path></svg>
     <label for="weekLabel">本周</label>
     <input type="date" id="weekLabel" onchange="save();updateWeekRange()">
     <span class="week-range" id="weekRange"></span>
@@ -452,20 +494,26 @@
 
   <div class="sec-head">
     <h2>
-      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M20.4 13.2A8.5 8.5 0 1 1 10.8 3.6a7 7 0 0 0 9.6 9.6z"/></svg>
+      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M20.4 13.2A8.5 8.5 0 1 1 10.8 3.6a7 7 0 0 0 9.6 9.6z"></path></svg>
       每晚熄灯打卡
     </h2>
-    <span class="note">以 23:00 为锚 · 早睡 1 分换 1 分<br>24小时制：22:38 = 晚10:38</span>
+    <span class="note" id="anchorNote">以 23:00 为锚 · 早睡 1 分换 1 分<br>24小时制：22:38 = 晚10:38</span>
   </div>
   <div class="day-group" id="days"></div>
 
   <div class="verdict" id="verdictCard">
-    <div class="v-label">下周末每天可用 <span class="fin-flag" id="finFlag" style="display:none;">已约定</span></div>
+    <div class="v-top">
+      <div class="v-label">下周末每天可用 <span class="fin-flag" id="finFlag" style="display:none;">已约定</span></div>
+      <div class="v-actions">
+        <button class="va-btn" onclick="askArchive()">归档结算</button>
+        <button class="va-btn ghost" onclick="copyResult()">复制结果</button>
+      </div>
+    </div>
     <div class="v-main">
       <span class="v-num num" id="sumFinal">120</span>
       <span class="v-unit">分钟 / 天</span>
       <button class="v-edit" id="finEditBtn" onclick="askCustomFin()" aria-label="手动约定周末额度">
-        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M13 5.5l5.5 5.5"/><path d="M4 20l1-4L16.5 4.5a2.12 2.12 0 0 1 3 3L8 19l-4 1z"/></svg>
+        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M13 5.5l5.5 5.5"></path><path d="M4 20l1-4L16.5 4.5a2.12 2.12 0 0 1 3 3L8 19l-4 1z"></path></svg>
         约定
       </button>
     </div>
@@ -474,57 +522,65 @@
       <div class="v-row"><span>考试结算</span><b id="sumExam">0 分钟</b></div>
       <div class="v-row"><span>连续达标奖励</span><b id="sumStreak">0 分钟</b></div>
     </div>
-    <div class="v-tip" id="sumTip">周六、周日各按此额度执行，上限 180 分钟；额度最低为 0，不会倒欠。结算后记得在纸质表上签字确认。</div>
+    <div class="pot-strip" id="potStrip">
+      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><ellipse cx="12" cy="6.5" rx="7" ry="3"></ellipse><path d="M5 6.5v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V6.5"></path><path d="M5 12v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V12"></path></svg>
+      <span>罐内 <b id="psPot">0</b> 分钟<span id="psOverWrap"> · 本周溢出 <b id="psOver">0</b></span></span>
+      <span class="sp"></span>
+      <button class="pot-btn" id="psBtn" onclick="savePot()" style="display:none;">存入</button>
+    </div>
+    <div class="v-tip" id="sumTip">周六、周日各按此额度执行，上限按约定执行；额度最低为 0，不会倒欠。结算后记得在纸质表上签字确认。</div>
   </div>
 
-  <div class="mini-grid">
-    <div class="card" style="flex:1;">
-      <h3>
-        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M4 20h16"/><rect x="6" y="11" width="3.4" height="6" rx="1"/><rect x="10.5" y="7" width="3.4" height="10" rx="1"/><rect x="15" y="13" width="3.4" height="4" rx="1"/></svg>
-        考试名次
-      </h3>
-      <div class="row">较上次 <input type="number" id="examDelta" placeholder="0" oninput="save()"> 名</div>
-      <div class="row">换算：<span class="ex-res" id="examRes">0 分钟</span></div>
+  <details class="bonus">
+    <summary>
+      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.2 2.2M16.2 16.2l2.2 2.2M5.6 18.4l2.2-2.2M16.2 7.8l2.2-2.2"></path></svg>
+      本周加分项
+      <span class="sum-note">考试名次 · 周五自由夜 · 连续奖励</span>
+      <svg class="icon chev" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+    </summary>
+    <div class="bonus-body">
+      <div class="mini-grid" style="display:flex; gap:9px;">
+        <div class="card" style="flex:1;">
+          <h3>
+            <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M4 20h16"></path><rect x="6" y="11" width="3.4" height="6" rx="1"></rect><rect x="10.5" y="7" width="3.4" height="10" rx="1"></rect><rect x="15" y="13" width="3.4" height="4" rx="1"></rect></svg>
+            考试名次
+          </h3>
+          <div class="row">较上次 <input type="number" id="examDelta" placeholder="0" oninput="save()"> 名</div>
+          <div class="row">换算：<span class="ex-res" id="examRes">0 分钟</span></div>
+        </div>
+        <div class="card" style="flex:1;">
+          <h3>
+            <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M20.4 13.2A8.5 8.5 0 1 1 10.8 3.6a7 7 0 0 0 9.6 9.6z"></path></svg>
+            周五自由夜
+          </h3>
+          <div class="row">超 24:00 <input type="number" id="friOver" placeholder="0" oninput="save()"> 分</div>
+          <div class="row">下周五截止：<span class="ex-res" id="friRes">24:00</span></div>
+        </div>
+      </div>
+      <div class="card wide">
+        <h3>
+          <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 3c1 3-3 4.5-3 8a3.5 3.5 0 0 0 7 .5c1.6 1 2.5 2.6 2.5 4A6.5 6.5 0 1 1 8 9.5C9.5 7 11.5 5.5 12 3z"></path></svg>
+          连续达标奖励
+        </h3>
+        <div class="row">已连续达标 <input type="number" id="streak" class="streak-pill" placeholder="0" min="0" max="99" readonly onclick="askStreak()" aria-label="点击纠正连续周数"> 周 <span class="streak-tag" id="streakTag">自动</span></div>
+        <div class="row">奖励：<span class="ex-res" id="streakRes">0 分钟</span>（<span id="streakNote">每满 3 周 +30</span>）</div>
+        <div class="row" id="weekHit" style="display:none;">
+          <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+          本周 4 天全达标，归档时连续自动 +1 周
+        </div>
+      </div>
     </div>
-    <div class="card" style="flex:1;">
-      <h3>
-        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M20.4 13.2A8.5 8.5 0 1 1 10.8 3.6a7 7 0 0 0 9.6 9.6z"/></svg>
-        周五自由夜
-      </h3>
-      <div class="row">超 24:00 <input type="number" id="friOver" placeholder="0" oninput="save()"> 分</div>
-      <div class="row">下周五截止：<span class="ex-res" id="friRes">24:00</span></div>
-    </div>
-  </div>
-
-  <div class="card wide" style="margin-top:10px;">
-    <h3>
-      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 3c1 3-3 4.5-3 8a3.5 3.5 0 0 0 7 .5c1.6 1 2.5 2.6 2.5 4A6.5 6.5 0 1 1 8 9.5C9.5 7 11.5 5.5 12 3z"/></svg>
-      连续达标奖励
-    </h3>
-    <div class="row">已连续达标 <input type="number" id="streak" placeholder="0" min="0" max="99" oninput="save()"> 周</div>
-    <div class="row">奖励：<span class="ex-res" id="streakRes">0 分钟</span>（每满 3 周 +30）</div>
-    <div class="row" id="weekHit" style="display:none;">
-      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
-      本周 4 天全达标，结算时可 +1 周
-    </div>
-  </div>
-
-  <div class="pot-strip" id="potStrip">
-    <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><ellipse cx="12" cy="6.5" rx="7" ry="3"/><path d="M5 6.5v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V6.5"/><path d="M5 12v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V12"/></svg>
-    <span>罐内 <b id="psPot">0</b> 分钟<span id="psOverWrap"> · 本周溢出 <b id="psOver">0</b></span></span>
-    <span class="sp"></span>
-    <button class="pot-btn" id="psBtn" onclick="savePot()" style="display:none;">存入</button>
-  </div>
+  </details>
 
   <details class="rules">
     <summary>
       我们的约定
       <span class="rules-date" id="rulesDate"></span>
-      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
     </summary>
     <ol id="termsList"></ol>
     <button class="rules-edit-btn" onclick="askEditRules()">
-      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M13 5.5l5.5 5.5"/><path d="M4 20l1-4L16.5 4.5a2.12 2.12 0 0 1 3 3L8 19l-4 1z"/></svg>
+      <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M13 5.5l5.5 5.5"></path><path d="M4 20l1-4L16.5 4.5a2.12 2.12 0 0 1 3 3L8 19l-4 1z"></path></svg>
       编辑约定 · 协商后写入，换家庭也能用
     </button>
   </details>
@@ -539,7 +595,7 @@
 
     <div class="pot-hero">
       <div class="ph-label">
-        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><ellipse cx="12" cy="6.5" rx="7" ry="3"/><path d="M5 6.5v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V6.5"/><path d="M5 12v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V12"/></svg>
+        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><ellipse cx="12" cy="6.5" rx="7" ry="3"></ellipse><path d="M5 6.5v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V6.5"></path><path d="M5 12v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V12"></path></svg>
         学期存钱罐 · 存进罐里的时间
       </div>
       <div class="ph-main">
@@ -547,31 +603,35 @@
         <span class="ph-unit">分钟</span>
       </div>
       <div class="ph-sub">
-        <span>寒假 <input type="number" id="holiDays" placeholder="40" min="1" max="60" style="width:52px;padding:5px 6px;border:1.5px solid var(--line);border-radius:8px;font-size:13px;background:#FDFBF7;outline:none;" oninput="save()"> 天 → 每天可加 <b id="holiAdd">—</b></span>
+        <span>寒假 <input type="number" id="holiDays" placeholder="40" min="1" max="60" oninput="save()"> 天 → 每天可加 <b id="holiAdd">—</b></span>
       </div>
     </div>
 
-    <div class="card wide" style="margin-top:0;">
-      <h3>
-        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M20 12.5v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/><path d="M12 3v10"/><path d="M8.5 9.5L12 13l3.5-3.5"/></svg>
-        本周溢出存入
-        <button class="btn-min" id="potMgrBtn" onclick="togglePotMgr()" style="margin-left:auto;">
-          <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M13 5.5l5.5 5.5"/><path d="M4 20l1-4L16.5 4.5a2.12 2.12 0 0 1 3 3L8 19l-4 1z"/></svg>
-          调整 / 清零
-        </button>
-      </h3>
-      <div class="row" id="potMgrBox" style="display:none;">
-        <input type="number" id="potAdj" placeholder="正存 负取" style="width:88px;padding:5px 6px;border:1.5px solid var(--line);border-radius:8px;font-size:13px;background:#FDFBF7;outline:none;">
-        <button class="btn-min" onclick="applyPotAdj()">确定</button>
-        <button class="btn-min" onclick="clearPot()">清零</button>
+    <div class="bonus" style="margin-top:0;" open>
+      <div class="bonus-body" style="padding-top:12px;">
+        <div class="card wide">
+          <h3>
+            <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M20 12.5v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"></path><path d="M12 3v10"></path><path d="M8.5 9.5L12 13l3.5-3.5"></path></svg>
+            本周溢出存入
+            <button class="btn-min" id="potMgrBtn" onclick="togglePotMgr()" style="margin-left:auto;">
+              <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M13 5.5l5.5 5.5"></path><path d="M4 20l1-4L16.5 4.5a2.12 2.12 0 0 1 3 3L8 19l-4 1z"></path></svg>
+              调整 / 清零
+            </button>
+          </h3>
+          <div class="row" id="potMgrBox" style="display:none;">
+            <input type="number" id="potAdj" placeholder="正存 负取" style="width:88px;padding:5px 6px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;background:rgba(255,255,255,.72);outline:none;">
+            <button class="btn-min" onclick="applyPotAdj()">确定</button>
+            <button class="btn-min" onclick="clearPot()">清零</button>
+          </div>
+          <div class="row">本周溢出 <span class="ex-res" id="potWeek">0</span> 分钟 <button class="pot-btn" id="potBtn" onclick="savePot()">存入</button></div>
+          <div class="row pot-tip">每周超 180 的部分存入罐中，学期末 1 分钟换 1 分钟兑成假期时间；每次存入和调整都会记在下面的流水里</div>
+        </div>
       </div>
-      <div class="row">本周溢出 <span class="ex-res" id="potWeek">0</span> 分钟 <button class="pot-btn" id="potBtn" onclick="savePot()">存入</button></div>
-      <div class="row pot-tip">每周超 180 的部分存入罐中，学期末 1 分钟换 1 分钟兑成假期时间；每次存入和调整都会记在下面的流水里</div>
     </div>
 
     <div class="sec-head sec-pad">
       <h2>
-        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>
         存入流水
       </h2>
     </div>
@@ -580,6 +640,21 @@
   </div><!-- /viewPot -->
 
 </div>
+
+<nav class="tabbar" role="tablist">
+  <button class="tab on" id="tab-week" onclick="switchTab('week')">
+    <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"></rect><path d="M8 3v4M16 3v4M3.5 10h17"></path></svg>
+    本周
+  </button>
+  <button class="tab" id="tab-hist" onclick="switchTab('hist')">
+    <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+    历史<span class="cnt" id="tabHistCnt"></span>
+  </button>
+  <button class="tab" id="tab-pot" onclick="switchTab('pot')">
+    <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><ellipse cx="12" cy="6.5" rx="7" ry="3"></ellipse><path d="M5 6.5v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V6.5"></path><path d="M5 12v5.5c0 1.66 3.13 3 7 3s7-1.34 7-3V12"></path></svg>
+    存钱罐<span class="cnt" id="tabPotCnt"></span>
+  </button>
+</nav>
 
 <div class="modal-mask" id="modalMask" role="dialog" aria-modal="true">
   <div class="modal" id="modalBox"></div>
@@ -631,7 +706,7 @@ function init() {
   box.innerHTML = `
     ${scored.map(d => `
     <div class="day">
-      <div class="dw">${d.name}<small>${d.sub}</small></div>
+      <div class="dw">${d.name}<small id="sub_${d.key}">${d.special ? d.sub : '锚 ' + hm(getRules().anchor)}</small></div>
       <input type="time" id="in_${d.key}" onchange="save()">
       <div class="badge" id="bd_${d.key}">未填</div>
     </div>`).join('')}
@@ -661,7 +736,8 @@ function init() {
   DAYS.forEach(d => { if (saved[d.key]) document.getElementById('in_' + d.key).value = saved[d.key]; });
   if (saved.examDelta) document.getElementById('examDelta').value = saved.examDelta;
   if (saved.friOver) document.getElementById('friOver').value = saved.friOver;
-  if (saved.streak !== undefined) document.getElementById('streak').value = saved.streak;
+  // 连续周数：自动链优先；旧数据（手动填过的 streak）无缝接上作为起点
+  document.getElementById('streak').value = saved.streakAuto !== undefined ? saved.streakAuto : (saved.streak !== undefined ? saved.streak : 0);
   if (saved.holiDays) document.getElementById('holiDays').value = saved.holiDays;
   renderTerms();
   render();
@@ -770,6 +846,9 @@ function save() {
   data.holiDays = document.getElementById('holiDays').value;
   const prev = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
   data.potSaved = prev.potSaved || false; // 本周是否已存（周数据里，换周自动重置）
+  data.customFin = prev.customFin;        // 手动约定值（改打卡时间不能丢）
+  data.streakAuto = prev.streakAuto;      // 连续周数自动链
+  data.streakManual = prev.streakManual;  // 连续周数是否手改过
   localStorage.setItem('mile_phone_week', JSON.stringify(data));
   render();
 }
@@ -788,24 +867,31 @@ function savePot() { // 本周溢出存入存钱罐（每周一次），记流�
   render(); renderPotView();
 }
 
-function calcOver() { // 本周溢出 = 原算额度 − 封顶（约定值不参与存罐计算）
+function calcOver() { // 本周溢出 = (基数±变动) − 上限；基数 = 约定值（有约定时）或周末基数
   const R = getRules();
+  const storeNow = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
+  const cf = parseInt(storeNow.customFin || 0);
   let sum = 0;
   DAYS.forEach(d => { if (!d.noscore && d.key !== 'fri') sum += calc(document.getElementById('in_' + d.key).value) || 0; });
   const exam = parseInt(document.getElementById('examDelta').value || 0);
   const streak = Math.max(0, parseInt(document.getElementById('streak').value || 0));
-  const raw = Math.max(0, R.base + sum + exam * R.examPer + Math.floor(streak / R.streakN) * R.streakBonus);
-  return Math.max(0, raw - R.cap);
+  const basis = cf > 0 ? cf : R.base;
+  const capRaw = Math.max(0, basis + sum + exam * R.examPer + Math.floor(streak / R.streakN) * R.streakBonus);
+  return Math.max(0, capRaw - R.cap);
 }
 
 function render() {
   const R = getRules();
+  document.getElementById('anchorNote').innerHTML = `以 ${hm(R.anchor)} 为锚 · 早睡 1 分换 1 分<br>24小时制：22:38 = 晚10:38`;
+  document.getElementById('streakNote').textContent = `每满 ${R.streakN} 周 +${R.streakBonus}`;
   const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
   let sum = 0, allScored = true, allOk = true;
   DAYS.forEach(d => {
     const bd = document.getElementById('bd_' + d.key);
     if (d.noscore) { bd.textContent = '—'; bd.className = 'badge'; return; }
     if (d.key === 'fri') { bd.textContent = '自由夜'; bd.className = 'badge'; return; }
+    const subEl = document.getElementById('sub_' + d.key);
+    if (subEl) subEl.textContent = '锚 ' + hm(R.anchor);
     const v = calc(document.getElementById('in_' + d.key).value);
     if (v === null) { bd.textContent = '未填'; bd.className = 'badge'; allScored = false; allOk = false; return; }
     bd.textContent = v > 0 ? `+${v}` : `${v}`;
@@ -824,17 +910,26 @@ function render() {
   document.getElementById('streakRes').textContent = (streakBonus > 0 ? '+' : '') + streakBonus + ' 分钟/天';
   document.getElementById('weekHit').style.display = (allScored && allOk) ? 'block' : 'none';
   const raw = Math.max(0, R.base + sum + examMins + streakBonus);
-  const auto = Math.min(raw, R.cap);
   const custom = parseInt(store.customFin || 0);
-  const fin = custom > 0 ? custom : auto;
+  // 统一模型：基数 = 约定值（有约定时）或周末基数；± 本周变动；超过上限的部分自动存入存钱罐（上限独立生效）
+  const basis = custom > 0 ? custom : R.base;
+  const capRaw = Math.max(0, basis + sum + examMins + streakBonus);
+  const fin = Math.min(capRaw, R.cap);
+  const thisWeekOver = Math.max(0, capRaw - R.cap);
   document.getElementById('sumFinal').textContent = fin;
   const flag = document.getElementById('finFlag');
   flag.style.display = custom > 0 ? '' : 'none';
+  const stTag = document.getElementById('streakTag');
+  if (stTag) {
+    stTag.textContent = store.streakManual ? '已手改' : '自动';
+    stTag.className = 'streak-tag' + (store.streakManual ? ' manual' : '');
+  }
+  const seg = (label, v) => v ? ` ${v > 0 ? '+' : '−'} ${label} ${Math.abs(v)}` : '';
   document.getElementById('sumTip').textContent = custom > 0
-    ? `已按协商约定执行 ${custom} 分钟/天（公式原算 ${auto}）。归档后自动恢复公式计算。`
+    ? `以约定 ${custom} 为基数加减本周变动 = ${capRaw} 分钟/天${capRaw > R.cap ? `，超过上限 ${R.cap} 的 ${thisWeekOver} 分钟自动存入存钱罐` : ''}。归档后自动恢复公式计算。`
     : raw > R.cap
-      ? `原算 ${raw} 分钟，按封顶 ${R.cap} 执行，超出 ${raw - R.cap} 分钟可存入存钱罐。也可点「约定」手动定额度。`
-      : `周六、周日各按此额度执行（上限 ${R.cap}）；额度最低为 0，不会倒欠。也可点「约定」手动定额度。`;
+      ? `原算 ${raw} 分钟，按上限 ${R.cap} 执行，超出 ${thisWeekOver} 分钟可存入存钱罐。也可点「约定」同时定额度和上限。`
+      : `公式：基数 ${R.base}${seg('睡觉', sum)}${seg('考试', examMins)}${seg('连续', streakBonus)} = ${raw}，未到上限 ${R.cap}。上限可在「约定」里一起调。`;
   document.getElementById('examRes').textContent = (examMins > 0 ? '+' : '') + examMins + ' 分钟/天';
   const cut = 24 * 60 - over;
   document.getElementById('friRes').textContent =
@@ -851,13 +946,16 @@ function updatePotUI() { // 同步：本周状态条、存钱罐视图、tab 角
   document.getElementById('psPot').textContent = pot;
   document.getElementById('potBig').textContent = pot;
   document.getElementById('tabPotCnt').textContent = getPotAll().log.length || '';
-  // 本周溢出（周一~周四 + 考试 + 连续，共 raw − CAP）
+  // 本周溢出：基数（约定值或周末基数）± 变动，超过上限的部分
   let sum = 0;
   DAYS.forEach(d => { if (!d.noscore && d.key !== 'fri') sum += calc(document.getElementById('in_' + d.key).value) || 0; });
   const R = getRules();
   const exam = parseInt(document.getElementById('examDelta').value || 0);
   const streak = Math.max(0, parseInt(document.getElementById('streak').value || 0));
-  const thisOver = Math.max(0, R.base + sum + exam * R.examPer + Math.floor(streak / R.streakN) * R.streakBonus - R.cap);
+  const customFin = parseInt(store.customFin || 0);
+  const basis = customFin > 0 ? customFin : R.base;
+  const capRaw = Math.max(0, basis + sum + exam * R.examPer + Math.floor(streak / R.streakN) * R.streakBonus);
+  const thisOver = Math.max(0, capRaw - R.cap);
   document.getElementById('psOver').textContent = thisOver;
   document.getElementById('psOverWrap').style.display = (thisOver > 0 || potSaved) ? '' : 'none';
   const psBtn = document.getElementById('psBtn');
@@ -875,7 +973,7 @@ function askArchive() {
   const wk = weekDisplay();
   openModal(`
     <h4>结算归档</h4>
-    <div class="m-body">${wk ? '「' + wk + '」' : '本周'}记录将存入历史档案，然后清空打卡、开始新一周。存钱罐与流水不受影响。</div>
+    <div class="m-body">${wk ? '「' + wk + '」' : '本周'}记录将存入历史档案，然后清空打卡、开始新一周。存钱罐与流水不受影响。本周达标则连续自动 +1，破功则归 0；<b>不归档直接清空视为连续中断</b>，下周从 0 重新累计。</div>
     <div class="m-btns col">
       <button class="m-btn m-ok" id="arcOk">归档并开始新一周</button>
       <button class="m-btn m-cancel" id="arcSkip" style="color:var(--minus-ink);">不归档，直接清空</button>
@@ -895,7 +993,18 @@ function collectWeekSnap() {
   const streakBonus = Math.floor(streak / R.streakN) * R.streakBonus;
   const raw = Math.max(0, R.base + sum + exam * R.examPer + streakBonus);
   const custom = parseInt(store.customFin || 0);
-  const fin = custom > 0 ? custom : Math.min(raw, R.cap);
+  // 统一模型：基数 = 约定值（有约定时）或周末基数；超过上限的部分存罐
+  const basis = custom > 0 ? custom : R.base;
+  const capRaw = Math.max(0, basis + sum + exam * R.examPer + streakBonus);
+  const fin = Math.min(capRaw, R.cap);
+  // 达标判定（口径同 render：周一~周四全部填写且得分≥0）
+  let hitScored = true, hitOk = true;
+  DAYS.forEach(d => {
+    if (d.noscore || d.key === 'fri') return;
+    const v = calc(document.getElementById('in_' + d.key).value);
+    if (v === null) { hitScored = false; return; }
+    if (v < 0) hitOk = false;
+  });
   const days = {};
   DAYS.forEach(d => days[d.key] = document.getElementById('in_' + d.key).value || '');
   const d = new Date(), p = n => String(n).padStart(2, '0');
@@ -903,8 +1012,8 @@ function collectWeekSnap() {
     week: weekDisplay() || '未命名周',
     archivedAt: `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())}`,
     days, exam, friOver: parseInt(document.getElementById('friOver').value || 0),
-    streak, streakBonus, sum, raw, fin, customFin: custom,
-    overflow: Math.max(0, raw - R.cap),
+    streak, streakBonus, sum, raw, fin, customFin: custom, hit: hitScored && hitOk,
+    overflow: Math.max(0, capRaw - R.cap),
     potSaved: !!store.potSaved
   };
 }
@@ -916,7 +1025,13 @@ function doArchive(keep) {
     if (!hasData) { toast('本周还没有数据，不用归档'); return; }
     const h = getHist(); h.unshift(snap); saveHist(h);
     const holi = document.getElementById('holiDays').value;
-    localStorage.setItem('mile_phone_week', JSON.stringify(holi ? { holiDays: holi } : {})); // 新周只保留寒假天数
+    // 连续周数自动结算：本周达标 → +1；破功 → 归 0（以输入框里的 carry-in 值为起点）
+    const next = {
+      streakAuto: snap.hit ? (parseInt(document.getElementById('streak').value || 0) + 1) : 0,
+      streakManual: false
+    };
+    if (holi) next.holiDays = holi;
+    localStorage.setItem('mile_phone_week', JSON.stringify(next)); // 新周：连续链 + 寒假天数
     init(); switchTab('week');
     toast(snap.overflow > 0 && !snap.potSaved ? `已归档。溢出 ${snap.overflow} 分钟记得存入存钱罐` : '已归档，新一周开始');
   } else {
@@ -948,14 +1063,14 @@ function renderHist() {
   if (!h.length) {
     box.innerHTML = `<div class="empty">
       <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-      还没有归档记录<br>周结算完，点右上角 <b>归档</b> 按钮<br>每周的打卡和结算就会存进这里</div>`;
+      还没有归档记录<br>周结算完，点结算卡里的 <b>归档结算</b> 按钮<br>每周的打卡和结算就会存进这里</div>`;
     return;
   }
   box.innerHTML = h.map(w => `
     <div class="hist-card" onclick="this.classList.toggle('open')">
       <div class="hist-head">
         <div class="hist-week">${esc(w.week)}
-          <div class="hist-date">归档于 ${esc(w.archivedAt)} · 连续达标 ${w.streak || 0} 周${w.potSaved ? ' · 溢出已存罐' : (w.overflow > 0 ? ' · <span style="color:var(--minus-ink);">溢出未存罐</span>' : '')}</div>
+          <div class="hist-date">归档于 ${esc(w.archivedAt)} · 连续达标 ${w.streak || 0} 周${w.hit === true ? ' · <span style="color:var(--plus-ink);font-weight:600;">本周全达标 ✓</span>' : (w.hit === false ? ' · <span style="color:var(--minus-ink);font-weight:600;">本周破功</span>' : '')}${w.potSaved ? ' · 溢出已存罐' : (w.overflow > 0 ? ' · <span style="color:var(--minus-ink);">溢出未存罐</span>' : '')}</div>
         </div>
         <div class="hist-fin"><b>${w.fin}</b><small>分钟/天</small></div>
       </div>
@@ -997,14 +1112,17 @@ function copyResult() {
   const raw = Math.max(0, R.base + sum + examMins + streakBonus);
   const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
   const custom = parseInt(store.customFin || 0);
-  const fin = custom > 0 ? custom : Math.min(raw, R.cap);
+  // 统一模型：基数 = 约定值（有约定时）或周末基数；超过上限的部分存罐
+  const basis = custom > 0 ? custom : R.base;
+  const capRaw = Math.max(0, basis + sum + examMins + streakBonus);
+  const fin = Math.min(capRaw, R.cap);
   const pot = getPot();
-  const thisOver = Math.max(0, raw - R.cap);
+  const thisOver = Math.max(0, capRaw - R.cap);
   const over = parseInt(document.getElementById('friOver').value || 0);
   const cut = 24 * 60 - over;
   const friCut = over > 0 ? `，下周五自由夜提前到 ${String(Math.floor(cut/60)).padStart(2,'0')}:${String(cut%60).padStart(2,'0')}` : '';
-  const capNote = raw > R.cap ? `（原算 ${raw} 分钟，按封顶 ${R.cap} 执行，超出 ${thisOver} 分钟存罐）` : '';
-  const custNote = custom > 0 ? `（协商约定值，公式原算 ${Math.min(raw, R.cap)}）` : '';
+  const capNote = capRaw > R.cap ? `（超过上限 ${R.cap}，${thisOver} 分钟存罐）` : '';
+  const custNote = custom > 0 ? `（以约定 ${custom} 分钟/天为基数）` : '';
   const potNote = `\n存钱罐：罐内累计 ${pot} 分钟${thisOver > 0 && !store.potSaved ? `（本周可再存 ${thisOver}）` : ''}`;
   const text = `【手机时间约定 · ${weekDisplay() || '本周'}结算】\n睡觉加减：${sum > 0 ? '+' : ''}${sum} 分钟\n考试结算：${examMins > 0 ? '+' : ''}${examMins} 分钟\n连续达标：已 ${streak} 周，奖励 ${streakBonus > 0 ? '+' : ''}${streakBonus} 分钟\n下周末每天可用：${fin} 分钟${custNote}${capNote}${potNote}${friCut}\n（确认无误后签字生效）`;
   navigator.clipboard.writeText(text).then(() => toast('已复制，可粘贴到微信')).catch(() => {
@@ -1012,17 +1130,47 @@ function copyResult() {
   });
 }
 
-// ===== 手动约定周末额度（协商后写入，替代公式值）=====
+// ===== 纠正连续周数（弹窗替代手输，改后以新数字为自动链起点）=====
+function askStreak() {
+  const cur = parseInt(document.getElementById('streak').value || 0);
+  openModal(`
+    <h4>纠正连续周数</h4>
+    <div class="m-body">当前连续 <b>${cur}</b> 周。归档时自动 +1 或归 0；手动改过则以新数字为起点继续累计。</div>
+    <div class="m-form">
+      <input type="number" id="skInput" inputmode="numeric" min="0" max="99" value="${cur}" style="width:100%;">
+      <div class="m-hint">填 0 表示重新开始计数</div>
+    </div>
+    <div class="m-btns">
+      <button class="m-btn m-cancel" onclick="closeModal()">取消</button>
+      <button class="m-btn m-ok" id="skOk">保存</button>
+    </div>`);
+  document.getElementById('skOk').onclick = () => {
+    const v = parseInt(document.getElementById('skInput').value || 0);
+    if (isNaN(v) || v < 0 || v > 99) { toast('请填 0–99 的数字'); return; }
+    const data = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
+    data.streak = v;
+    data.streakAuto = v;      // 以新数字为自动链起点
+    data.streakManual = true;
+    localStorage.setItem('mile_phone_week', JSON.stringify(data));
+    document.getElementById('streak').value = v;
+    closeModal(); render();
+    toast('已纠正，归档时以新数字继续累计');
+  };
+}
+
+// ===== 手动约定周末额度（额度与上限独立设置，超过上限自动存罐）=====
 function askCustomFin() {
   const store = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
   const cur = parseInt(store.customFin || 0);
+  const curCap = getRules().cap;
   openModal(`
-    <h4>约定下周末额度</h4>
-    <div class="m-body">结算谈妥后，把协商结果写进来，替代公式算出的数。留空或填 0 恢复公式计算，归档开始新一周后自动清除。</div>
-    <div class="m-form">
-      <input type="number" id="cfInput" inputmode="numeric" min="0" max="600" placeholder="0–600" value="${cur > 0 ? cur : ''}" style="width:100%;">
-      <div class="m-hint">当前公式算出：${document.getElementById('sumFinal').textContent} 分钟/天</div>
+    <h4>约定周末额度与上限</h4>
+    <div class="m-body">周末额度以「每周额度」为基数加减本周变动；超过「每周上限」的部分自动存入存钱罐。额度留空或填 0 恢复公式计算；两项独立生效，之后也可在「编辑约定」里单独改上限。</div>
+    <div class="m-grid">
+      <label>每周额度（基数）<input type="number" id="cfInput" inputmode="numeric" min="0" max="600" placeholder="0–600" value="${cur > 0 ? cur : ''}"></label>
+      <label>每周上限（超出存罐）<input type="number" id="cfCap" inputmode="numeric" min="0" max="600" value="${curCap}"></label>
     </div>
+    <div class="m-hint">当前公式算出：${document.getElementById('sumFinal').textContent} 分钟/天 · 当前上限：${curCap} 分钟/天</div>
     <div class="m-btns">
       ${cur > 0 ? '<button class="m-btn m-cancel" id="cfClear">恢复公式</button>' : ''}
       <button class="m-btn m-ok" id="cfOk">写入约定</button>
@@ -1030,11 +1178,21 @@ function askCustomFin() {
   const data = JSON.parse(localStorage.getItem('mile_phone_week') || '{}');
   document.getElementById('cfOk').onclick = () => {
     const v = parseInt(document.getElementById('cfInput').value || 0);
-    if (v < 0 || v > 600 || isNaN(v)) { toast('请填 0–600 的数字'); return; }
+    const capV = parseInt(document.getElementById('cfCap').value || 0);
+    if (v < 0 || v > 600 || isNaN(v)) { toast('额度请填 0–600 的数字'); return; }
+    if (isNaN(capV) || capV < 0 || capV > 600) { toast('上限请填 0–600 的数字'); return; }
+    const R = getRules();
+    // 上限独立保存（跟随弹窗里的值）；默认条款按新参数同步数字
+    const nr = Object.assign({}, R, { cap: capV > 0 ? capV : R.cap });
+    const rawR = JSON.parse(localStorage.getItem('mile_phone_rules') || '{}');
+    const strip = t => String(t).replace(/<\/?em>/g, '');
+    const isDefault = (rawR.terms || defaultTerms(R)).map(strip).join('\n') === defaultTerms(R).map(strip).join('\n');
+    if (isDefault) nr.terms = defaultTerms(nr);
+    saveRules(nr);
     if (v > 0) data.customFin = v; else delete data.customFin;
     localStorage.setItem('mile_phone_week', JSON.stringify(data));
-    closeModal(); render();
-    toast(v > 0 ? `已约定 ${v} 分钟/天` : '已恢复公式计算');
+    closeModal(); renderTerms(); render();
+    toast(v > 0 ? `已约定 ${v} 分钟/天，每周上限 ${nr.cap} 分钟` : `已恢复公式计算，每周上限 ${nr.cap} 分钟`);
   };
   const clr = document.getElementById('cfClear');
   if (clr) clr.onclick = () => {
@@ -1072,7 +1230,7 @@ function askEditRules() {
   const termsText = (raw.terms || defaultTerms(R)).map(t => t.replace(/<\/?em>/g, '')).join('\n');
   openModal(`
     <h4>编辑约定</h4>
-    <div class="m-body">数字是计算规则，文字是条款内容——改完数字记得把对应条款文字也改一致。</div>
+    <div class="m-body">额度 = 基数（约定周为约定值，平时为周末基数）± 睡觉加减 + 考试/连续奖励；超过「周末封顶」的部分自动存入存钱罐。封顶随时可改、立即生效。改完数字记得把条款文字也改一致。</div>
     <div class="m-grid">
       <label>熄灯锚点<input type="time" id="rgAnchor" value="${hm(R.anchor)}"></label>
       <label>周末基数<input type="number" id="rgBase" inputmode="numeric" value="${R.base}"></label>
@@ -1167,5 +1325,48 @@ function toast(msg) {
 
 init();
 </script>
-</body>
+<script id="meoo-baxia-web-security" async src="https://g.alicdn.com/sd/baxia/2.5.35/baxiaCommon.js"></script>
+      <div id="meoo-brand-watermark" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999999;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 12px;
+        color: #666;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 6px 8px 6px 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      " onclick="window.open('https://meoo.com', '_blank')"
+         onmouseover="this.style.transform='scale(1.02)'; this.style.background='rgba(255, 255, 255, 0.98)'; this.style.boxShadow='0 4px 16px rgba(0, 0, 0, 0.15)';"
+         onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(255, 255, 255, 0.95)'; this.style.boxShadow='0 2px 12px rgba(0, 0, 0, 0.1)';">
+        <img src="https://assets.cdn.meoo.host/public/meoo-logo.png" alt="Meoo" style="width: 16px; height: 16px; border-radius: 3px;">
+        <span style="white-space: nowrap;">By <span style="font-weight: 600; color: #007bff;">Meoo 秒悟</span></span>
+        <button onclick="event.stopPropagation(); document.getElementById('meoo-brand-watermark').remove();" style="
+          background: none;
+          border: none;
+          color: #bbb;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: bold;
+          margin-left: 2px;
+          padding: 0;
+          width: 14px;
+          height: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: color 0.2s ease;
+          line-height: 1;
+        " onmouseover="this.style.color='#666';" onmouseout="this.style.color='#bbb';">×</button>
+      </div>
+    </body>
 </html>
