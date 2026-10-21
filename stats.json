@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-21T19:26:17+08:00",
-  "total": 8784,
-  "count": 12,
+  "updatedAt": "2026-10-21T19:35:46+08:00",
+  "total": 9024,
+  "count": 14,
   "skills": {
     "bom-organizer-hardware": {
       "name": "BOM 六分类整理",
-      "downloads": 1930
+      "downloads": 1932
     },
     "jlc-bom-converter": {
       "name": "SMT BOM 上机整理",
@@ -50,6 +50,14 @@
     "hw-issue-tracker": {
       "name": "问题跟踪",
       "downloads": 229
+    },
+    "hw-datasheet-compare": {
+      "name": "电子物料规格书对比",
+      "downloads": 117
+    },
+    "hw-build-gap-analyzer": {
+      "name": "投产缺口分析与下单倒排",
+      "downloads": 121
     }
   }
 }
