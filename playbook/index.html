@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标准打法 · 一天半建一套管理体系台账｜娜姐 · AI应用交付</title>
+<meta name="description" content="外部Agent×钉钉开放接口的标准打法：一天半交付一套跑起来的管理体系台账，员工在原来的钉钉里用，零新增成本。首个实施样本：约百人制造企业。">
+<style>
+:root{
+  --bg:#FAF8F4; --card:#FFFFFF; --card-warm:#F7F4EE; --card-accent:#EAF2EC;
+  --border:#E8E2D6; --border-soft:#F0EBE0;
+  --ink:#1C1B19; --ink-2:#5C5A54; --ink-3:#9A968C;
+  --accent:#3A6B5C; --accent-d:#2D5648; --accent-l:#5C8C7E;
+  --r-lg:16px; --r-md:12px; --r-sm:8px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --font-d:'Sora','Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  --font-b:'Noto Sans SC','Sora',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--font-b); font-size:16px; line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px; margin:0 auto; padding:0 20px;}
+
+/* nav */
+.nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(250,248,244,.92); backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border-soft);
+}
+.nav-in{
+  max-width:1080px; margin:0 auto; padding:14px 20px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.nav-brand{font-family:var(--font-d); font-weight:700; font-size:15px; color:var(--ink); text-decoration:none;}
+.nav-brand small{font-weight:400; color:var(--ink-3); margin-left:8px; font-size:13px;}
+.nav-links{display:flex; gap:20px;}
+.nav-links a{font-size:13px; color:var(--ink-2); text-decoration:none; white-space:nowrap;}
+.nav-links a:hover{color:var(--accent);}
+
+/* hero */
+.hero{padding:72px 0 48px;}
+.kicker{
+  font-family:var(--font-d); font-size:13px; letter-spacing:.25em;
+  color:var(--accent); font-weight:600; margin-bottom:18px;
+}
+h1{
+  font-family:var(--font-d); font-size:clamp(30px,5.2vw,52px);
+  font-weight:700; line-height:1.22; letter-spacing:-.01em;
+  max-width:760px; margin-bottom:20px;
+}
+.lede{font-size:17px; color:var(--ink-2); max-width:640px; margin-bottom:28px;}
+.lede strong{color:var(--ink);}
+.pills{display:flex; flex-wrap:wrap; gap:10px;}
+.pill{
+  background:var(--card); border:1px solid var(--border);
+  border-radius:999px; padding:7px 18px; font-size:14px; color:var(--ink);
+}
+.pill b{color:var(--accent); font-weight:700;}
+
+/* section */
+.sec{padding:44px 0;}
+.sec-alt{background:var(--card-warm); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft);}
+.sec-k{
+  font-family:var(--font-d); font-size:13px; letter-spacing:.2em;
+  color:var(--ink-3); font-weight:600; margin-bottom:26px;
+}
+.sec-k em{font-style:normal; color:var(--accent); margin-right:10px;}
+
+/* 数据墙 */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px;}
+.stat{
+  background:var(--card); border:1px solid var(--border-soft);
+  border-radius:var(--r-md); padding:24px 22px;
+}
+.stat .num{font-family:var(--font-d); font-size:34px; font-weight:700; color:var(--accent); line-height:1.15;}
+.stat .num small{font-size:18px; font-weight:600; margin-left:2px;}
+.stat .lab{font-size:14px; color:var(--ink-2); margin-top:6px;}
+
+/* 公式 */
+.formula{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px;}
+.f-card{
+  background:var(--card); border:1px solid var(--border-soft);
+  border-radius:var(--r-md); padding:22px;
+}
+.f-card h3{font-family:var(--font-d); font-size:17px; font-weight:700; margin-bottom:8px;}
+.f-card h3 span{color:var(--accent); margin-right:8px; font-size:14px;}
+.f-card p{font-size:14px; color:var(--ink-2);}
+.f-sum{
+  margin-top:16px; font-size:16px; color:var(--ink);
+  padding-left:16px; border-left:3px solid var(--accent);
+}
+.f-sum b{color:var(--accent);}
+
+/* 流程 */
+.steps{max-width:780px;}
+.step{
+  display:flex; gap:16px; align-items:baseline;
+  padding:16px 0; border-bottom:1px solid var(--border-soft);
+}
+.step:last-child{border-bottom:none;}
+.step .no{font-family:var(--font-d); font-size:13px; font-weight:700; color:var(--accent); flex-shrink:0; width:26px;}
+.step .body{flex:1; min-width:0;}
+.step .t{font-size:16px; font-weight:600; color:var(--ink);}
+.step .d{font-size:14px; color:var(--ink-2);}
+.step .tt{font-size:13px; color:var(--ink-3); flex-shrink:0; white-space:nowrap;}
+
+/* 边界 */
+.limits{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px;}
+.l-card{
+  background:var(--card); border:1px solid var(--border-soft);
+  border-radius:var(--r-md); padding:20px;
+}
+.l-card h3{font-size:15px; font-weight:700; margin-bottom:6px;}
+.l-card p{font-size:14px; color:var(--ink-2);}
+.l-note{margin-top:16px; font-size:13px; color:var(--ink-3);}
+
+/* CTA */
+.cta{
+  background:linear-gradient(135deg,var(--card-accent) 0%,var(--card) 100%);
+  border:1px solid var(--border-soft); border-radius:var(--r-lg);
+  padding:48px 40px; text-align:center;
+}
+.cta h2{font-family:var(--font-d); font-size:clamp(22px,3.4vw,30px); font-weight:700; margin-bottom:12px;}
+.cta p{font-size:15px; color:var(--ink-2); margin-bottom:26px;}
+.cta-btn{
+  display:inline-block; background:var(--accent); color:#fff;
+  font-family:var(--font-d); font-weight:600; font-size:15px;
+  padding:14px 34px; border-radius:999px; text-decoration:none;
+  transition:background .2s var(--ease);
+}
+.cta-btn:hover{background:var(--accent-d);}
+.cta-links{margin-top:18px; font-size:14px; color:var(--ink-2);}
+.cta-links a{color:var(--accent); font-weight:600; text-decoration:none; border-bottom:1px solid var(--accent);}
+.cta-links a:hover{opacity:.7;}
+
+/* footer */
+footer{
+  padding:32px 0 44px; font-size:13px; color:var(--ink-3);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+footer a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--border);}
+footer a:hover{color:var(--accent);}
+
+@media (max-width:640px){
+  .hero{padding:52px 0 36px;}
+  .sec{padding:34px 0;}
+  .step{flex-wrap:wrap; gap:6px 12px;}
+  .step .tt{width:100%; padding-left:42px;}
+  .cta{padding:36px 22px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a class="nav-brand" href="https://lina354095137.github.io/">娜姐<small>AI 应用交付 · 厦门</small></a>
+    <div class="nav-links">
+      <a href="https://lina354095137.github.io/workbench/" target="_blank" rel="noopener">工作台实机 ↗</a>
+      <a href="https://lina354095137.github.io/#contact">找她</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">标准打法 · PLAYBOOK</p>
+    <h1>一天半，一套跑起来的<br>管理体系台账</h1>
+    <p class="lede">外部 Agent 通过<strong>钉钉开放接口</strong>搭建，员工在<strong>原来的钉钉里</strong>直接用，不装新软件。这套打法已经完整跑通一遍——现在，它可以复制到下一家公司。</p>
+    <div class="pills">
+      <span class="pill"><b>1.5 天</b> 交付</span>
+      <span class="pill"><b>0 元</b> 新增成本</span>
+      <span class="pill"><b>0</b> 学习成本</span>
+    </div>
+  </div>
+</header>
+
+<section class="sec sec-alt">
+  <div class="wrap">
+    <p class="sec-k"><em>01</em>首个实施样本 · 实绩</p>
+    <div class="stats">
+      <div class="stat"><div class="num">69<small>份</small></div><div class="lab">受控文件入库 · 0 空值</div></div>
+      <div class="stat"><div class="num">3<small>处</small></div><div class="lab">定级疑点 · AI 交叉比对真抓出来</div></div>
+      <div class="stat"><div class="num">12<small>份</small></div><div class="lab">复审逾期 · 自动显形按部门分解</div></div>
+      <div class="stat"><div class="num">136<small>条</small></div><div class="lab">文件路径 · 逐条核验</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="sec-k"><em>02</em>核心公式</p>
+    <div class="formula">
+      <div class="f-card">
+        <h3><span>内核</span>知识内核</h3>
+        <p>ISO 四阶受控体系、文控最佳实践、AI 字段配置方法——固化成 Agent 的知识包。专业性来自沉淀，不来自临场发挥。</p>
+      </div>
+      <div class="f-card">
+        <h3><span>手感</span>搭建能力</h3>
+        <p>Agent 通过钉钉开放接口直接建表、配 AI 字段、设自动化规则、生成仪表盘。已实战验证。</p>
+      </div>
+      <div class="f-card">
+        <h3><span>切换</span>无感切换</h3>
+        <p>台账长在客户自己的钉钉里。员工原来怎么用钉钉，现在还怎么用——多出来的只是一张表。</p>
+      </div>
+    </div>
+    <p class="f-sum">三样相乘，交付物从"一个项目"变成"一个标准动作"——下一家公司：<b>再来一天半。</b></p>
+  </div>
+</section>
+
+<section class="sec sec-alt">
+  <div class="wrap">
+    <p class="sec-k"><em>03</em>五步流程 · 一天半标准动作</p>
+    <div class="steps">
+      <div class="step">
+        <span class="no">01</span>
+        <div class="body"><div class="t">现场调研</div><div class="d">Agent 访谈式收集：组织架构、现有文件清单、内部人员的日常习惯。</div></div>
+        <span class="tt">0.5 天</span>
+      </div>
+      <div class="step">
+        <span class="no">02</span>
+        <div class="body"><div class="t">生成台账</div><div class="d">按知识内核建四阶框架与字段，配 AI 字段：摘要、密级、适用范围。</div></div>
+        <span class="tt">0.5 天</span>
+      </div>
+      <div class="step">
+        <span class="no">03</span>
+        <div class="body"><div class="t">资料导入</div><div class="d">历史文件结构化入库，AI×人工交叉比对，抓定级疑点挂待复核。</div></div>
+        <span class="tt">0.5 天</span>
+      </div>
+      <div class="step">
+        <span class="no">04</span>
+        <div class="body"><div class="t">自动化上线</div><div class="d">版本修订记录、复审逾期监测、疑点留痕，全部自动跑。</div></div>
+        <span class="tt">0.5 小时</span>
+      </div>
+      <div class="step">
+        <span class="no">05</span>
+        <div class="body"><div class="t">交接培训</div><div class="d">给文控员只加一个新习惯：每天看仪表盘。其余照旧。</div></div>
+        <span class="tt">1 小时</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <p class="sec-k"><em>04</em>边界 · 知道什么不做</p>
+    <div class="limits">
+      <div class="l-card">
+        <h3>不做体系咨询</h3>
+        <p>交付"跑起来的台账"，不做 ISO 认证辅导。</p>
+      </div>
+      <div class="l-card">
+        <h3>不碰文件内容</h3>
+        <p>Agent 管结构和状态，内容的正确性归各部门。</p>
+      </div>
+      <div class="l-card">
+        <h3>不做深水区</h3>
+        <p>审批流改造、与已有系统打通——二期再说，先把台账一个场景打穿。</p>
+      </div>
+    </div>
+    <p class="l-note">说清楚不做什么，比说清楚能做什么更难——这两样，这份打法都写全了。</p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="cta">
+      <h2>你的公司也在用钉钉？<br>这套打法可以直接复制给你。</h2>
+      <p>从调研到上线一天半，员工零学习成本。先聊清楚你的场景，再动手。</p>
+      <a class="cta-btn" href="https://lina354095137.github.io/#contact">微信联系</a>
+      <div class="cta-links">想先看看长什么样？<a href="https://lina354095137.github.io/workbench/" target="_blank" rel="noopener">打开受控文件工作台实机 ↗</a></div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>© 2026 李娜 · 娜姐｜AI 应用交付</span>
+  <span>本页样本数据已匿名化处理 · <a href="https://lina354095137.github.io/">← 返回主页</a></span>
+</footer>
+
+</body>
+</html>
