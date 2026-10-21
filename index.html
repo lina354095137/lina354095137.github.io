@@ -346,7 +346,7 @@ img{max-width:100%;display:block;}
       <p class="stat-lbl">上架的 AI 技能包</p>
     </div>
     <div class="card c-stat">
-      <p class="stat-num">9,000<i>+</i></p>
+      <p class="stat-num" data-stat="total">9,000<i>+</i></p>
       <p class="stat-lbl">累计下载</p>
     </div>
     <div class="card c-stat">
@@ -511,6 +511,8 @@ img{max-width:100%;display:block;}
         var s=d.skills[el.getAttribute('data-skill')];
         if(s&&s.downloads){el.textContent=s.downloads.toLocaleString('en-US')+' 次下载';}
       });
+      var t=document.querySelector('[data-stat="total"]');
+      if(t&&d.total){t.childNodes[0].nodeValue=d.total.toLocaleString('en-US');}
       var u=document.getElementById('stats-updated');
       if(u&&d.updatedAt){u.textContent=' · 数据每日同步自 SkillHub（'+d.updatedAt.slice(0,10)+' 更新）';}
     }).catch(function(){});
