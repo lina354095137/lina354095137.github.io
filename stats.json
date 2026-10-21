@@ -1,0 +1,55 @@
+{
+  "updatedAt": "2026-10-21T19:24:13+08:00",
+  "total": 8782,
+  "count": 12,
+  "skills": {
+    "bom-organizer-hardware": {
+      "name": "BOM 六分类整理",
+      "downloads": 1930
+    },
+    "jlc-bom-converter": {
+      "name": "SMT BOM 上机整理",
+      "downloads": 1758
+    },
+    "hardware-project-scheduler": {
+      "name": "硬件项目排期",
+      "downloads": 1263
+    },
+    "intelligent-hardware-expert-team": {
+      "name": "智能硬件开发专家团",
+      "downloads": 730
+    },
+    "prd-decompose-hardware": {
+      "name": "PRD 拆解",
+      "downloads": 723
+    },
+    "injection-mold-pricing": {
+      "name": "注塑模具估价",
+      "downloads": 570
+    },
+    "skill-health-manager": {
+      "name": "技能健康管理",
+      "downloads": 496
+    },
+    "smart-hardware-pm-evaluator": {
+      "name": "立项评估",
+      "downloads": 450
+    },
+    "supplier-doc-manager": {
+      "name": "供应商资料管理",
+      "downloads": 170
+    },
+    "price-pool-manager": {
+      "name": "采购助手",
+      "downloads": 180
+    },
+    "hw-risk-register": {
+      "name": "风险管理",
+      "downloads": 283
+    },
+    "hw-issue-tracker": {
+      "name": "问题跟踪",
+      "downloads": 229
+    }
+  }
+}
