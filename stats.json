@@ -1,67 +1,67 @@
 {
-  "updatedAt": "2026-11-23T07:49:41+08:00",
-  "total": 14309,
+  "updatedAt": "2026-11-24T07:46:41+08:00",
+  "total": 14467,
   "count": 15,
   "skills": {
     "bom-organizer-hardware": {
       "name": "BOM 六分类整理",
-      "downloads": 3404
+      "downloads": 3448
     },
     "jlc-bom-converter": {
       "name": "SMT BOM 上机整理",
-      "downloads": 3346
+      "downloads": 3382
     },
     "hardware-project-scheduler": {
       "name": "硬件项目排期",
-      "downloads": 1672
+      "downloads": 1681
     },
     "intelligent-hardware-expert-team": {
       "name": "智能硬件开发专家团",
-      "downloads": 1126
+      "downloads": 1134
     },
     "prd-decompose-hardware": {
       "name": "PRD 拆解",
-      "downloads": 1140
+      "downloads": 1151
     },
     "injection-mold-pricing": {
       "name": "注塑模具估价",
-      "downloads": 791
+      "downloads": 797
     },
     "skill-health-manager": {
       "name": "技能健康管理",
-      "downloads": 551
+      "downloads": 553
     },
     "smart-hardware-pm-evaluator": {
       "name": "立项评估",
-      "downloads": 658
+      "downloads": 664
     },
     "price-pool-manager": {
       "name": "采购助手",
-      "downloads": 283
+      "downloads": 285
     },
     "hw-risk-register": {
       "name": "风险管理",
-      "downloads": 483
+      "downloads": 492
     },
     "hw-issue-tracker": {
       "name": "问题跟踪",
-      "downloads": 348
+      "downloads": 353
     },
     "hw-datasheet-compare": {
       "name": "电子物料规格书对比",
-      "downloads": 360
+      "downloads": 363
     },
     "excel-to-aitable-migration": {
       "name": "采购业务进度管理表搭建助手",
-      "downloads": 76
+      "downloads": 81
     },
     "controlled-doc-registry": {
       "name": "受控文件管理台账搭建助手",
-      "downloads": 54
+      "downloads": 58
     },
     "procurement-outbound-redact": {
       "name": "采购对外文件脱敏助手",
-      "downloads": 17
+      "downloads": 25
     }
   }
 }
